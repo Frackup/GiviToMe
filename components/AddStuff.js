@@ -1,7 +1,7 @@
 // components/AddStuff.js
 
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TextInput } from 'react-native'
 
 /*TODO:
 - Afficher le formulaire d'ajout d'un prêt d'objet
@@ -12,6 +12,7 @@ class AddStuff extends React.Component {
         return(
             <View style={styles.main_view}>
                 <Text style={styles.text_view}>This is the Stuff adding page!!</Text>
+                <TextInput>Montant</TextInput>
             </View>
         )
     }

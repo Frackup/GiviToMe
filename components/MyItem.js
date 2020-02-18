@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { StyleSheet, TouchableOpacity, Image, View, Text } from 'react-native'
+import Moment from 'react-moment'
 
 /* TODO:
 - Construire le template de la cellule de mes listes
@@ -11,11 +12,11 @@ import { StyleSheet, TouchableOpacity, Image, View, Text } from 'react-native'
 class MyItem extends React.Component{
 
     _peopleRendering(){
-        const { myItem, displayDetailsForMyItem } = this.props
+        const { myItem, itemType, displayDetailsForMyItem } = this.props
         return(
             <TouchableOpacity 
                 style={styles.main_container}
-                onPress={() => displayDetailsForMyItem(myItem.id)}>
+                onPress={() => displayDetailsForMyItem(myItem.id, itemType)}>
                 <View style={styles.image_container}>
                     <Image style={styles.image} source={require('../assets/ic_people.png')}/>
                 </View>
@@ -42,7 +43,7 @@ class MyItem extends React.Component{
         return(
             <TouchableOpacity 
                 style={styles.main_container}
-                onPress={() => displayDetailsForMyItem(myItem.id)}>
+                onPress={() => displayDetailsForMyItem(myItem.key)}>
                 <View style={styles.image_container}>
                     <Image style={styles.image} source={require('../assets/ic_money.png')}/>
                 </View>
@@ -58,7 +59,7 @@ class MyItem extends React.Component{
                     </View>
                     <View style={styles.line_in_content}>
                         <Image style={styles.icon} source={require('../assets/ic_box.png')}/>
-                        <Text style={styles.title_text}>{myItem.date}</Text>
+                        <Moment style={styles.title_text} element={Text} format="DD/MM/YYYY" date={myItem.date}/>
                     </View>
                     <View style={styles.line_in_content}>
                         <Image style={styles.icon} source={require('../assets/ic_people.png')}/>

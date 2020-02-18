@@ -1,9 +1,18 @@
 // components/Home.js
+/************
+Cette page affiche le récapitulatif des assets prêtés et du nombre de personnes impliquées
+Une première récupération des informations de base de données se fera à ce niveau pour permettre de calculer les
+informations à afficher.
+
+Important d'utiliser ensuite redux pour permettre de conserver et transférer les informations sans effectuer à nouveau
+un appel à la DB.
+*************/
 
 import React from 'react'
-import { StyleSheet, Text, Image, View, Button } from 'react-native'
+import { StyleSheet, Text, Image, View, Button, TouchableOpacity } from 'react-native'
 import Moment from 'react-moment'
-import numeral from 'numeral'
+import { CommonActions } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 /* TODO:
 - Il faut ajouter les fonctions pour afficher l'argent total que l'on a prêté.
@@ -12,28 +21,74 @@ import numeral from 'numeral'
 - Voir ensuite pour remplir la vue avec une liste de prêts d'argent ou d'objets en fonction du bouton cliqué.
 - Penser aussi à l'action sur le bouton d'ajout qui dépendra du bouton cliqué.
  */
+//const navigation = useNavigation()
 
 class Home extends React.Component {
 
+    /*static navigationOptions = () => {
+        //const { params } = navigation.state
+        //route = navigation.state
+        return {
+            headerRight: () => <TouchableOpacity style={styles.settings_touchable_headerrightbutton}
+                            onPress={() => navigation.goToSettings()}>
+                            <Image style={styles.settings_image}
+                            source={require('../assets/ic_settings.png')} />
+            </TouchableOpacity>
+        }
+    }*/
+
+    constructor(props) {
+        super(props)
+        this._goToSettings = this._goToSettings.bind(this)
+    }
+
+    _updateNavigationParams() {
+        const navigation = this.props.navigation
+        const route = this.props.route
+
+        navigation.setParams({
+          goToSettings: this._goToSettings
+        })
+
+        console.log(route.params)
+
+        navigation.setOptions({
+            headerRight: () => <TouchableOpacity style={styles.settings_touchable_headerrightbutton}
+                            onPress={() => route.params.goToSettings()}>
+                            <Image style={styles.settings_image}
+                            source={require('../assets/ic_settings.png')} />
+            </TouchableOpacity>
+        })
+    }
+
+    componentDidMount(){
+        this._updateNavigationParams()
+    }
+
     _checkMoneyDetails(){
-        this.props.navigation.navigate('Details', {type: 'Money'})
+        this.props.navigation.navigate('LendList', {type: 'Money'})
     }
 
     _checkStuffDetails(){
-        this.props.navigation.navigate('Details', {type: 'Stuff'})
+        this.props.navigation.navigate('LendList', {type: 'Stuff'})
     }
 
     _checkPeopleDetails(){
-        this.props.navigation.navigate('Details', {type: 'People'})
+        this.props.navigation.navigate('LendList', {type: 'People'})
+    }
+
+    _goToSettings = () => {
+        this.props.navigation.navigate('Settings')
     }
 
     render(){
         const date = new Date();
+        //const { navigation } = this.props;
 
         return(
             <View style={styles.main_container}>
                 <View style={styles.header_view}>
-                    <Text style={styles.header_text}>Bonjour,</Text>
+                    <Text style={styles.header_text}>GiViToMe</Text>
                     <Text style={styles.header_text}>Nous sommes le :{' '}
                     {/* TODO: Penser à gérer ensuite les formats de date étrangers */}
                         <Moment element={Text} format="DD/MM/YYYY" date={date}/>
@@ -66,7 +121,7 @@ class Home extends React.Component {
                     </View>
                 </View>
                 <View style={styles.footer_view}>
-                    <Text style={styles.text_footer_view}>a.vescera inc</Text>
+                    <Text style={styles.text_footer_view}>a.vescera inc.</Text>
                 </View>
             </View>
         )
@@ -144,6 +199,13 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 14,
         margin: 10
+    },
+    settings_touchable_headerrightbutton: {
+        marginRight: 8
+    },
+    settings_image: {
+        width: 30,
+        height: 30
     }
 })
 
