@@ -1,7 +1,7 @@
 // components/AddMoney.js
 
 import React from 'react'
-import { StyleSheet, View, Text, Button, Alert, TouchableOpacity, Keyboard, TouchableNativeFeedbackBase } from 'react-native'
+import { StyleSheet, View, Text, Button, Alert, TouchableOpacity, Keyboard } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Moment from 'react-moment'

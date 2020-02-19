@@ -1,12 +1,11 @@
 // components/Money.js
 
 import React from 'react'
-import { StyleSheet, View, Text, Image, Platform, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Image, Platform, FlatList, ActivityIndicator } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import MyItem from './MyItem'
 //import fakeMoneyData from '../helpers/fakeMoneyData'
 import firebase from '../config/Firebase'
-import moment from 'moment'
 
 /*TODO:
 - Finaliser le branchement firebase
@@ -145,15 +144,6 @@ class LendList extends React.Component {
 
     _checkData(){
         this._displayDataList()
-        /*
-        if (this.props.navigation.getParam('type') === 'Money') {
-            return (<Text>This is the Money View</Text>)
-        } else if (this.props.navigation.getParam('type') === 'Stuff') {
-            return (<Text>This is the Stuff View</Text>)
-        } else {
-            return (<Text>This is the People View</Text>)
-        }
-        */
     }
 
     _displayDetailsForMyItem = (idItem, type) => {
@@ -171,22 +161,6 @@ class LendList extends React.Component {
         } else {
             return this.state.peopleList
         }
-/*
-        return(
-            <FlatList
-                style={styles.list}
-                data={mesDonnees}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({item}) => <MyItem 
-                    myItem={item}
-                    itemType={this.props.navigation.getParam('type')}
-                    displayDetailsForMyItem={this._displayDetailsForMyItem}/>}
-                onEndReachedThreshold={0.5}
-                onEndReached={() => {
-                }}
-            />
-        )
-        */
     }
 
     render(){
@@ -227,8 +201,8 @@ const styles=StyleSheet.create({
         marginRight: 8
     },
     add_image: {
-        width: 30,
-        height: 30
+        width: 25,
+        height: 25
     },
     add_touchable_floatingactionbutton: {
         position: 'absolute',

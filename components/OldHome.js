@@ -1,4 +1,4 @@
-// components/Test.js
+// components/OldHome.js
 /************
 Cette page affiche le récapitulatif des assets prêtés et du nombre de personnes impliquées
 Une première récupération des informations de base de données se fera à ce niveau pour permettre de calculer les
@@ -11,7 +11,6 @@ un appel à la DB.
 import React from 'react'
 import { StyleSheet, Text, Image, View, Button, TouchableOpacity } from 'react-native'
 import Moment from 'react-moment'
-import { Ionicons } from '@expo/vector-icons'
 
 /* TODO:
 - Il faut ajouter les fonctions pour afficher l'argent total que l'on a prêté.
@@ -22,7 +21,7 @@ import { Ionicons } from '@expo/vector-icons'
  */
 //const navigation = useNavigation()
 
-class Test extends React.Component {
+class OldHome extends React.Component {
 
     constructor(props) {
         super(props)
@@ -76,42 +75,37 @@ class Test extends React.Component {
             <View style={styles.main_container}>
                 <View style={styles.header_view}>
                     <Text style={styles.header_text}>GiViToMe</Text>
-                    {/*
                     <Text style={styles.header_text}>Nous sommes le :{' '}
-                    {/* TODO: Penser à gérer ensuite les formats de date étrangers}
+                    {/* TODO: Penser à gérer ensuite les formats de date étrangers */}
                         <Moment element={Text} format="DD/MM/YYYY" date={date}/>
                     </Text>
-                    */}
                 </View>
-
                 <View style={styles.lend_view}>
-
-                        <View style={styles.lend_header}>
-                            <Image source={require('../assets/icons/dash.png')}/>
-                            <Text style={styles.lend_title}>Money</Text>
+                    <Text style={styles.title_lend_text}>Vos prêts :</Text>
+                    <View style={styles.money_stuff_view}>
+                        <View style={styles.money_view}>
+                            <View style={styles.money_data_view}>
+                                <Image source={require('../assets/icons/ic_money.png')} style={styles.home_img} />
+                                <Text>XXX $</Text>
+                            </View>
+                            <Button title='Money' onPress={() => {this._checkMoneyDetails()}}/>
                         </View>
-                        <View style={styles.lend_content}>
-                            <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
-                            <Text style={styles.lend_text}>XXX $</Text>
-                            <TouchableOpacity style={styles.add_button} onPress={() => {this._checkMoneyDetails()}}>
-                                <Ionicons name='ios-add' size={60} color='#ED6D6D' />
-                            </TouchableOpacity>
+                        <View style={styles.stuff_view}>
+                            <View style={styles.stuff_data_view}>
+                                <Image source={require('../assets/icons/ic_box.png')} style={styles.home_img} />
+                                <Text>XXX objets</Text>
+                            </View>
+                            <Button title='Stuff' onPress={() => {this._checkStuffDetails()}}/>
                         </View>
-
-                        <View style={styles.lend_header}>
-                            <Image source={require('../assets/icons/dash.png')}/>
-                            <Text style={styles.lend_title}>Stuff</Text>
+                    </View>
+                    <View style={styles.people_view}>
+                        <View style={styles.people_data_view}>
+                            <Image source={require('../assets/icons/ic_people.png')} style={styles.home_img} />
+                            <Text>XXX people</Text>
                         </View>
-                        <View style={styles.lend_content}>
-                            <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
-                            <Text style={styles.lend_text}>XXX</Text>
-                            <TouchableOpacity style={styles.add_button} onPress={() => {this._checkStuffDetails()}}>
-                                <Ionicons name='ios-add' size={60} color='#ED6D6D' />
-                            </TouchableOpacity>
-                        </View>
-
+                        <Button title='People' onPress={() => {this._checkPeopleDetails()}}/>
+                    </View>
                 </View>
-
                 <View style={styles.footer_view}>
                     <Text style={styles.text_footer_view}>a.vescera inc.</Text>
                 </View>
@@ -125,49 +119,62 @@ const styles = StyleSheet.create({
         flex: 1
     },
     header_view: {
-        flex: 1,
-        justifyContent: 'space-evenly',
-        marginTop: 10,
-        marginBottom: 20
+        flex: 1.5,
+        justifyContent: 'space-evenly'
     },
     header_text: {
         textAlign: 'center',
-        fontSize: 35,
-        color: '#ED6D6D'
+        fontSize: 14,
+        marginTop: 10
     },
     lend_view: {
         flex: 3,
         justifyContent: 'flex-start'
     },
-    lend_header: {
+    title_lend_text:{
+        textAlign: 'center',
+        fontSize: 14,
+        marginTop: 10,
+        marginBottom: 30
+    },
+    money_stuff_view: {
         flexDirection: 'row',
-        justifyContent: 'flex-start',
         alignItems: 'center',
-        marginBottom: 20,
-        marginTop: 20
+        justifyContent: 'space-evenly'
     },
-    lend_title: {
-        fontSize: 25,
-        marginLeft: 10
-    },
-    lend_text: {
-        fontSize: 25,
-        marginLeft: 10,
-        position: 'absolute'
-    },
-    add_button: {
-        alignSelf: 'flex-end',
-        marginRight: 40
-    },
-    lend_content: {
+    money_view: {
         alignItems: 'center',
-        justifyContent: 'center',
-        margin: 10,
-        marginBottom: 10,
-        marginTop: 10
+        justifyContent: 'space-evenly',
+        margin: 10
+    },
+    money_data_view: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly'
+    },
+    stuff_view: {
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        margin: 10
+    },
+    stuff_data_view: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly'
+    },
+    people_view: {
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        margin: 10
+    },
+    people_data_view: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-evenly'
     },
     home_img: {
-        position: 'absolute',
+        width: 40,
+        height: 40,
         marginRight: 10
     },
     footer_view: {
@@ -179,11 +186,13 @@ const styles = StyleSheet.create({
         fontSize: 14,
         margin: 10
     },
+    settings_touchable_headerrightbutton: {
+        marginRight: 8
+    },
     settings_image: {
-        width: 25,
-        height: 25,
-        marginRight: 10
+        width: 30,
+        height: 30
     }
 })
 
-export default Test
+export default OldHome
