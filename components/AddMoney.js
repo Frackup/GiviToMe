@@ -18,18 +18,37 @@ class AddMoney extends React.Component {
     constructor() {
         super();
         this.ref = firebase.firestore().collection('money');
+        this.globalData = firebase.firestore().collection('globalData')
+
         this.state = {
             title: "",
             titleAlert: false,
-            amount: "",
+            amount: 0,
             amountAlert: false,
             date: new Date(),
             people: "",
             peopleAlert: false,
             show: false,
-            displayedAmount: "0 €"
+            displayedAmount: "0 €",
+            totalMoney: 0,
+            totalStuff: 0
         };
     }
+
+    _onCollectionUpdate = (querySnapshot) => {
+        querySnapshot.forEach((globalData) => {
+            const { id, totalMoney } = globalData.data()
+            this.setState({
+                globalDataId: id,
+                totalMoney: totalMoney,
+                isLoading: false,
+            })
+        })
+    }
+
+    /*componentDidMount() {
+        this.unsubscribe = this.globalData.onSnapshot(this._onCollectionUpdate)
+    }*/
 
     _setDate = (event, date) => {
         date = date || this.state.date;
@@ -62,6 +81,13 @@ class AddMoney extends React.Component {
     }
 
     _addMoney() {
+        const newTotalAmount = parseInt(this.state.totalMoney) + parseInt(this.state.amount)
+        console.log(this.state.globalDataId)
+        this.setState({
+            totalMoney: newTotalAmount
+        })
+
+        // Ajout du prêt d'argent en BDD
         this.ref.add({
             title: this.state.title,
             amount: this.state.amount,
@@ -77,6 +103,24 @@ class AddMoney extends React.Component {
         })
         .catch((error) => {
             console.error("Error adding money: ", error);
+        });
+
+        console.log(this.state.totalMoney)
+
+        // Mise à jour du total prêté dans la table des données globales
+        const updateRef = firebase.firestore().collection('globalData').doc(this.state.globalDataId);
+        updateRef.set({
+            totalMoney: newTotalAmount
+        }).then((docRef) => {
+            this.setState({
+            newTotalAmount: newTotalAmount,
+            });
+        })
+        .catch((error) => {
+            console.error("Error updating global data: ", error);
+            this.setState({
+              isLoading: false,
+            });
         });
     }
 

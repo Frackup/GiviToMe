@@ -4,7 +4,6 @@ import React from 'react'
 import { StyleSheet, View, Image, Platform, FlatList, ActivityIndicator } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import MyItem from './MyItem'
-//import fakeMoneyData from '../helpers/fakeMoneyData'
 import firebase from '../config/Firebase'
 
 /*TODO:

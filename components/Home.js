@@ -10,9 +10,10 @@ un appel à la DB.
 *************/
 
 import React from 'react'
-import { StyleSheet, Text, Image, View, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, Image, View, Button, TouchableOpacity, Platform } from 'react-native'
 import Moment from 'react-moment'
 import { Ionicons } from '@expo/vector-icons'
+import firebase from '../config/Firebase'
 
 /* TODO:
 - Il faut ajouter les fonctions pour afficher l'argent total que l'on a prêté.
@@ -28,6 +29,24 @@ class Home extends React.Component {
     constructor(props) {
         super(props)
         this._goToSettings = this._goToSettings.bind(this)
+        this.ref = firebase.firestore().collection('globalData')
+
+        this.state = { 
+            totalMoney: 0,
+            totalStuff: 0,
+            isLoading: true
+        }
+    }
+
+    _onCollectionUpdate = (querySnapshot) => {
+        querySnapshot.forEach((globalData) => {
+            const { id, totalMoney, totalStuff } = globalData.data()
+            this.setState({
+                totalMoney: totalMoney,
+                totalStuff: totalStuff,
+                isLoading: false,
+            })
+        })
     }
 
     _updateNavigationParams() {
@@ -51,18 +70,15 @@ class Home extends React.Component {
 
     componentDidMount(){
         this._updateNavigationParams()
+        this.unsubscribe = this.ref.onSnapshot(this._onCollectionUpdate)
     }
 
-    _checkMoneyDetails(){
-        this.props.navigation.navigate('LendList', {type: 'Money'})
+    _addMoney(){
+        this.props.navigation.navigate('AddMoney')
     }
 
-    _checkStuffDetails(){
-        this.props.navigation.navigate('LendList', {type: 'Stuff'})
-    }
-
-    _checkPeopleDetails(){
-        this.props.navigation.navigate('LendList', {type: 'People'})
+    _addStuff(){
+        this.props.navigation.navigate('AddStuff')
     }
 
     _goToSettings = () => {
@@ -70,8 +86,11 @@ class Home extends React.Component {
     }
 
     render(){
-        const date = new Date();
+        //const date = new Date();
         //const { navigation } = this.props;
+
+        let iconName
+        (Platform.OS === 'android') ? iconName = 'md-add' : iconName = 'ios-add'
 
         return(
             <View style={styles.main_container}>
@@ -93,9 +112,10 @@ class Home extends React.Component {
                         </View>
                         <View style={styles.lend_content}>
                             <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
-                            <Text style={styles.lend_text}>XXX $</Text>
-                            <TouchableOpacity style={styles.add_button} onPress={() => {this.props.navigation.navigate('AddMoney')}}>
-                                <Ionicons name='ios-add' size={60} color='#ED6D6D' />
+                            {/* TODO: Gérer la localization pour afficher soit € soit $ */}
+                            <Text style={styles.lend_text}>{this.state.totalMoney} €</Text>
+                            <TouchableOpacity style={styles.add_button} onPress={() => {this._addMoney()}}>
+                                <Ionicons name={iconName} size={60} color='#ED6D6D' />
                             </TouchableOpacity>
                         </View>
 
@@ -105,9 +125,9 @@ class Home extends React.Component {
                         </View>
                         <View style={styles.lend_content}>
                             <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
-                            <Text style={styles.lend_text}>XXX</Text>
-                            <TouchableOpacity style={styles.add_button} onPress={() => {this.props.navigation.navigate('AddStuff')}}>
-                                <Ionicons name='ios-add' size={60} color='#ED6D6D' />
+                            <Text style={styles.lend_text}>{this.state.totalStuff}</Text>
+                            <TouchableOpacity style={styles.add_button} onPress={() => {this._addStuff()}}>
+                                <Ionicons name={iconName} size={60} color='#ED6D6D' />
                             </TouchableOpacity>
                         </View>
 
@@ -154,7 +174,8 @@ const styles = StyleSheet.create({
     lend_text: {
         fontSize: 25,
         marginLeft: 10,
-        position: 'absolute'
+        position: 'absolute',
+        color: 'white'
     },
     add_button: {
         alignSelf: 'flex-end',
