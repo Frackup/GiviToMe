@@ -18,7 +18,7 @@ class MyItem extends React.Component{
                 style={styles.main_container}
                 onPress={() => displayDetailsForMyItem(myItem.id, itemType)}>
                 <View style={styles.image_container}>
-                    <Image style={styles.image} source={require('../assets/ic_people.png')}/>
+                    <Image style={styles.image} source={require('../assets/icons/ic_people.png')}/>
                 </View>
                 <View style={styles.main_data_view}>
                     <Text style={styles.main_text}>Prénom</Text>
@@ -26,11 +26,11 @@ class MyItem extends React.Component{
                 </View>
                 <View style={styles.content_container}>
                     <View style={styles.line_in_content}>
-                        <Image style={styles.icon} source={require('../assets/ic_money.png')}/>
+                        <Image style={styles.icon} source={require('../assets/icons/ic_money.png')}/>
                         <Text style={styles.title_text}>X XXX €</Text>
                     </View>
                     <View style={styles.line_in_content}>
-                        <Image style={styles.icon} source={require('../assets/ic_box.png')}/>
+                        <Image style={styles.icon} source={require('../assets/icons/ic_box.png')}/>
                         <Text style={styles.title_text}>X XXX objets</Text>
                     </View>
                 </View>
@@ -45,7 +45,7 @@ class MyItem extends React.Component{
                 style={styles.main_container}
                 onPress={() => displayDetailsForMyItem(myItem.key)}>
                 <View style={styles.image_container}>
-                    <Image style={styles.image} source={require('../assets/ic_money.png')}/>
+                    <Image style={styles.image} source={require('../assets/icons/ic_money.png')}/>
                 </View>
                 <View style={styles.main_data_view}>
                     <Text style={styles.main_text}>
@@ -54,15 +54,15 @@ class MyItem extends React.Component{
                 </View>
                 <View style={styles.content_container}>
                     <View style={styles.line_in_content}>
-                        <Image style={styles.icon} source={require('../assets/ic_people.png')}/>
+                        <Image style={styles.icon} source={require('../assets/icons/ic_people.png')}/>
                         <Text style={styles.title_text}>{myItem.title}</Text>
                     </View>
                     <View style={styles.line_in_content}>
-                        <Image style={styles.icon} source={require('../assets/ic_box.png')}/>
+                        <Image style={styles.icon} source={require('../assets/icons/ic_box.png')}/>
                         <Moment style={styles.title_text} element={Text} format="DD/MM/YYYY" date={myItem.date}/>
                     </View>
                     <View style={styles.line_in_content}>
-                        <Image style={styles.icon} source={require('../assets/ic_people.png')}/>
+                        <Image style={styles.icon} source={require('../assets/icons/ic_people.png')}/>
                         <Text style={styles.title_text}>{myItem.people}</Text>
                     </View>
                 </View>

@@ -11,8 +11,6 @@ un appel à la DB.
 import React from 'react'
 import { StyleSheet, Text, Image, View, Button, TouchableOpacity } from 'react-native'
 import Moment from 'react-moment'
-import { CommonActions } from '@react-navigation/native'
-import { useNavigation } from '@react-navigation/native'
 
 /* TODO:
 - Il faut ajouter les fonctions pour afficher l'argent total que l'on a prêté.
@@ -24,18 +22,6 @@ import { useNavigation } from '@react-navigation/native'
 //const navigation = useNavigation()
 
 class Home extends React.Component {
-
-    /*static navigationOptions = () => {
-        //const { params } = navigation.state
-        //route = navigation.state
-        return {
-            headerRight: () => <TouchableOpacity style={styles.settings_touchable_headerrightbutton}
-                            onPress={() => navigation.goToSettings()}>
-                            <Image style={styles.settings_image}
-                            source={require('../assets/ic_settings.png')} />
-            </TouchableOpacity>
-        }
-    }*/
 
     constructor(props) {
         super(props)
@@ -56,7 +42,7 @@ class Home extends React.Component {
             headerRight: () => <TouchableOpacity style={styles.settings_touchable_headerrightbutton}
                             onPress={() => route.params.goToSettings()}>
                             <Image style={styles.settings_image}
-                            source={require('../assets/ic_settings.png')} />
+                            source={require('../assets/icons/ic_settings.png')} />
             </TouchableOpacity>
         })
     }
@@ -99,14 +85,14 @@ class Home extends React.Component {
                     <View style={styles.money_stuff_view}>
                         <View style={styles.money_view}>
                             <View style={styles.money_data_view}>
-                                <Image source={require('../assets/ic_money.png')} style={styles.home_img} />
+                                <Image source={require('../assets/icons/ic_money.png')} style={styles.home_img} />
                                 <Text>XXX $</Text>
                             </View>
                             <Button title='Money' onPress={() => {this._checkMoneyDetails()}}/>
                         </View>
                         <View style={styles.stuff_view}>
                             <View style={styles.stuff_data_view}>
-                                <Image source={require('../assets/ic_box.png')} style={styles.home_img} />
+                                <Image source={require('../assets/icons/ic_box.png')} style={styles.home_img} />
                                 <Text>XXX objets</Text>
                             </View>
                             <Button title='Stuff' onPress={() => {this._checkStuffDetails()}}/>
@@ -114,7 +100,7 @@ class Home extends React.Component {
                     </View>
                     <View style={styles.people_view}>
                         <View style={styles.people_data_view}>
-                            <Image source={require('../assets/ic_people.png')} style={styles.home_img} />
+                            <Image source={require('../assets/icons/ic_people.png')} style={styles.home_img} />
                             <Text>XXX people</Text>
                         </View>
                         <Button title='People' onPress={() => {this._checkPeopleDetails()}}/>

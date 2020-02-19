@@ -107,7 +107,7 @@ class LendList extends React.Component {
                         headerRight: () => <TouchableOpacity style={styles.add_touchable_headerrightbutton}
                                         onPress={() => route.params.addItem()}>
                                         <Image style={styles.add_image}
-                                        source={require('../assets/ic_add.png')} />
+                                        source={require('../assets/icons/ic_add.png')} />
                         </TouchableOpacity>
                 })
             }
@@ -137,7 +137,7 @@ class LendList extends React.Component {
             return(
             <TouchableOpacity style={styles.add_touchable_floatingactionbutton}
                 onPress={() => this._addItem()}>
-                <Image style={styles.add_image} source={require('../assets/ic_add.png')}/>
+                <Image style={styles.add_image} source={require('../assets/icons/ic_add.png')}/>
             </TouchableOpacity>
             )
         }
