@@ -97,6 +97,14 @@ function MoneyStackScreen() {
                 navigation: {navigation}}
             )}
             />
+            <MoneyStack.Screen name="ItemDetails"
+            component={ItemDetails} 
+            options={({route, navigation}) => (
+                {headerTitle: 'Détails', 
+                route: {route}, 
+                navigation: {navigation}}
+            )}
+            />
         </MoneyStack.Navigator>
     )
 }
@@ -117,6 +125,14 @@ function StuffStackScreen() {
             component={AddStuff} 
             options={({route, navigation}) => (
                 {headerTitle: 'Prêt d\'objet', 
+                route: {route}, 
+                navigation: {navigation}}
+            )}
+            />
+            <StuffStack.Screen name="ItemDetails"
+            component={ItemDetails} 
+            options={({route, navigation}) => (
+                {headerTitle: 'Détails', 
                 route: {route}, 
                 navigation: {navigation}}
             )}

@@ -10,8 +10,7 @@ un appel à la DB.
 *************/
 
 import React from 'react'
-import { StyleSheet, Text, Image, View, Button, TouchableOpacity, Platform } from 'react-native'
-import Moment from 'react-moment'
+import { StyleSheet, Text, Image, View, TouchableOpacity, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import firebase from '../config/Firebase'
 
@@ -33,22 +32,45 @@ class Home extends React.Component {
 
         this.state = { 
             totalMoney: 0,
-            totalStuff: 0,
+            totalQuantity: 0,
             isLoading: true
         }
     }
 
     _onCollectionUpdate = (querySnapshot) => {
         querySnapshot.forEach((globalData) => {
-            const { id, totalMoney, totalStuff } = globalData.data()
+            const { totalMoney, totalQuantity } = globalData.data()
             this.setState({
                 totalMoney: totalMoney,
-                totalStuff: totalStuff,
+                totalQuantity: totalQuantity,
                 isLoading: false,
             })
         })
     }
-
+/*
+    _getFirebaseData() {
+        let query = this.ref.get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+              console.log('No matching documents.');
+              return;
+            }  
+        
+            snapshot.forEach(globalData => {
+                const { totalMoney, totalQuantity } = globalData.data()
+                console.log(globalData.data())
+                this.setState({
+                    totalMoney: totalMoney,
+                    totalQuantity: totalQuantity,
+                    isLoading: false,
+                })
+            });
+          })
+          .catch(err => {
+            console.log('Error getting documents', err);
+          });
+    }
+*/
     _updateNavigationParams() {
         const navigation = this.props.navigation
         const route = this.props.route
@@ -56,8 +78,6 @@ class Home extends React.Component {
         navigation.setParams({
           goToSettings: this._goToSettings
         })
-
-        console.log(route.params)
 
         navigation.setOptions({
             headerRight: () => <TouchableOpacity style={styles.settings_touchable_headerrightbutton}
@@ -71,6 +91,7 @@ class Home extends React.Component {
     componentDidMount(){
         this._updateNavigationParams()
         this.unsubscribe = this.ref.onSnapshot(this._onCollectionUpdate)
+        //this._getFirebaseData()
     }
 
     _addMoney(){
@@ -125,7 +146,7 @@ class Home extends React.Component {
                         </View>
                         <View style={styles.lend_content}>
                             <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
-                            <Text style={styles.lend_text}>{this.state.totalStuff}</Text>
+                            <Text style={styles.lend_text}>{this.state.totalQuantity}</Text>
                             <TouchableOpacity style={styles.add_button} onPress={() => {this._addStuff()}}>
                                 <Ionicons name={iconName} size={60} color='#ED6D6D' />
                             </TouchableOpacity>

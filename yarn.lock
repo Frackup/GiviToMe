@@ -1360,10 +1360,18 @@
   dependencies:
     invariant "^2.2.4"
 
-"@react-native-community/masked-view@0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.5.tgz#25421be6cd943a4b1660b62cfbcd45be8891462c"
-  integrity sha512-Lj1DzfCmW0f4HnmHtEuX8Yy2f7cnUA8r5KGGUuDDGtQt1so6QJkKeUmsnLo2zYDtsF8due6hvIL06Vdo5xxuLQ==
+"@react-native-community/masked-view@^0.1.5":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.6.tgz#c7f2ac187c1f25aa8c30d11baa8f4398eca3bb84"
+  integrity sha512-PpMoeXwPUoldCRKDuSi+zK5rT+sJTW6ri6RdGPkSKRzU77Q1d9IaR0O5IKvBj0XSdL3p+dcOa05gk35aGDffBQ==
+
+"@react-navigation/bottom-tabs@^5.0.5":
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@react-navigation/bottom-tabs/-/bottom-tabs-5.0.6.tgz#aa282233d87c39f7414dcd5030d93465febcb0b9"
+  integrity sha512-TEanFKAt6rZbQdB7jC+yuERuY9cH05pLdpd5duGAEnPwT55UcmhNtPRoAHL3H9m4XRrzOQT6SzMAWkr/vtFWSQ==
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
 
 "@react-navigation/core@^3.5.1":
   version "3.5.1"
@@ -1409,6 +1417,14 @@
   integrity sha512-uMwjDCoCaPLegEcEOs34ocmJOIy1JMkKv9nWShMdBokk3cISv9oJYhv2Yr2YmhLaMQ3ZMzFjMQJh0DsvZ/7UOQ==
   dependencies:
     shortid "^2.2.15"
+
+"@react-navigation/stack@^5.0.5":
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/@react-navigation/stack/-/stack-5.0.6.tgz#e3e867b5d1b13e998c26411197cc102a4e747ebe"
+  integrity sha512-8j5KvLJ30yxlv0NhZhdcecvzUEhq2V0SnHOdjvkrJSo6cjmOU559t0QoSCqXLksH94TGnIJYbKIcc+ijME7bYA==
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
 
 "@types/bytebuffer@^5.0.40":
   version "5.0.40"
@@ -2739,6 +2755,13 @@ expo-constants@~8.0.0:
   integrity sha512-NGRwSWfhwNFA9WVLXwqnSDPJJ4DdXTqEkl9Fr9PcyW5VCoFgz7uke256E1YZsYhOE0Ph365lu/5jjZs+MRmRog==
   dependencies:
     ua-parser-js "^0.7.19"
+
+expo-contacts@~8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/expo-contacts/-/expo-contacts-8.0.0.tgz#495b61061538c458de949cfe56bedaef83a96490"
+  integrity sha512-hkXbzwEhAJGUDPwa6se93jLXWrDlmSwPCB1ytCDZ7VdOQElP1OM5XQXDOVKVNsF9dtGxr66GpGzW73amtpUV2g==
+  dependencies:
+    uuid-js "^0.7.5"
 
 expo-error-recovery@~1.0.0:
   version "1.0.0"
@@ -5226,6 +5249,11 @@ react-native-amount-input@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-amount-input/-/react-native-amount-input-1.0.0.tgz#6153dd3c28b7707aa14dc5a5ddeaa7b183cd0d52"
   integrity sha512-y6p/sv9NwSCiJSL0YRDiN8S9WUvlQIOWz1O+M2M/m4yHOvd65S0Vh2YsTC7DMNovHGj0EWOBTqs0qOug1kgw/A==
+
+react-native-contacts@^5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-5.0.7.tgz#19b59edd3702ebdc389db266089e5f9370ea7501"
+  integrity sha512-IRMiJCBJ98nK4v/oNueD1hXiqbmUOgncSIdL60NVSygH4ksqn2E2ipGwy81GAYmMk/yRgJgDB47QmOBlYt9Q1g==
 
 react-native-datepicker@^1.7.2:
   version "1.7.2"

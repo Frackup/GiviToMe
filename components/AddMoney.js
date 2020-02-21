@@ -8,11 +8,6 @@ import Moment from 'react-moment'
 
 import firebase from '../config/Firebase'
 
-/*TODO:
-- Afficher le formulaire d'ajout d'un prêt d'argent
-- Etudier la sauvegarde des données (base téléphone ? Cloud ?)
-*/
-
 class AddMoney extends React.Component {
 
     constructor() {
@@ -31,24 +26,35 @@ class AddMoney extends React.Component {
             show: false,
             displayedAmount: "0 €",
             totalMoney: 0,
-            totalStuff: 0
         };
     }
 
-    _onCollectionUpdate = (querySnapshot) => {
-        querySnapshot.forEach((globalData) => {
-            const { id, totalMoney } = globalData.data()
+    _getGlobalData() {
+        let query = this.globalData.get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+            console.log('No matching data.');
+            return;
+            }  
+
+            snapshot.forEach(myData => {
+            const { totalMoney, totalQuantity } = myData.data()
             this.setState({
-                globalDataId: id,
+                globalDataId: myData.id,
                 totalMoney: totalMoney,
+                totalQuantity: totalQuantity,
                 isLoading: false,
             })
+            });
         })
+        .catch(err => {
+            console.log('Error getting documents', err);
+        });
     }
 
-    /*componentDidMount() {
-        this.unsubscribe = this.globalData.onSnapshot(this._onCollectionUpdate)
-    }*/
+    componentDidMount() {
+        this._getGlobalData()
+    }
 
     _setDate = (event, date) => {
         date = date || this.state.date;
@@ -82,10 +88,6 @@ class AddMoney extends React.Component {
 
     _addMoney() {
         const newTotalAmount = parseInt(this.state.totalMoney) + parseInt(this.state.amount)
-        console.log(this.state.globalDataId)
-        this.setState({
-            totalMoney: newTotalAmount
-        })
 
         // Ajout du prêt d'argent en BDD
         this.ref.add({
@@ -96,7 +98,7 @@ class AddMoney extends React.Component {
         }).then((docRef) => {
             this.setState({
             title: '',
-            amount: '0',
+            amount: 0,
             date: new Date(),
             people: ''
             });
@@ -105,12 +107,11 @@ class AddMoney extends React.Component {
             console.error("Error adding money: ", error);
         });
 
-        console.log(this.state.totalMoney)
-
         // Mise à jour du total prêté dans la table des données globales
         const updateRef = firebase.firestore().collection('globalData').doc(this.state.globalDataId);
         updateRef.set({
-            totalMoney: newTotalAmount
+            totalMoney: newTotalAmount,
+            totalQuantity: this.state.totalQuantity
         }).then((docRef) => {
             this.setState({
             newTotalAmount: newTotalAmount,
@@ -147,7 +148,7 @@ class AddMoney extends React.Component {
             this.setState({ titleAlert: true })
             dataComplete= false
         }
-        if(this.state.amount === "0"){
+        if(this.state.amount === 0){
             this.setState({ amountAlert: true })
             dataComplete= false
         }
