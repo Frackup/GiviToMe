@@ -29,6 +29,7 @@ function HomeStackScreen() {
             component={Home} 
             options={({route, navigation}) => (
                 {headerTitle: 'Home Page', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -37,6 +38,7 @@ function HomeStackScreen() {
             component={LendList}
             options={({route, navigation}) => (
                 {headerTitle: 'Mes prêts', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -45,6 +47,7 @@ function HomeStackScreen() {
             component={AddMoney} 
             options={({route, navigation}) => (
                 {headerTitle: 'Prêt d\'argent', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -52,7 +55,8 @@ function HomeStackScreen() {
             <HomeStack.Screen name="AddStuff"
             component={AddStuff} 
             options={({route, navigation}) => (
-                {headerTitle: 'Prêt d\'objet', 
+                {headerTitle: 'Prêt d\'objet',
+                headerTintColor: '#707070', 
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -61,6 +65,7 @@ function HomeStackScreen() {
             component={Settings} 
             options={({route, navigation}) => (
                 {headerTitle: 'Settings', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -69,6 +74,7 @@ function HomeStackScreen() {
             component={ItemDetails} 
             options={({route, navigation}) => (
                 {headerTitle: 'Détails', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -85,6 +91,7 @@ function MoneyStackScreen() {
             initialParams={{ type: 'Money' }}
             options={({route, navigation}) => (
                 {headerTitle: 'Mes prêts', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -93,6 +100,7 @@ function MoneyStackScreen() {
             component={AddMoney} 
             options={({route, navigation}) => (
                 {headerTitle: 'Prêt d\'argent', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -101,6 +109,7 @@ function MoneyStackScreen() {
             component={ItemDetails} 
             options={({route, navigation}) => (
                 {headerTitle: 'Détails', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -117,6 +126,7 @@ function StuffStackScreen() {
             initialParams={{ type: 'Stuff' }}
             options={({route, navigation}) => (
                 {headerTitle: 'Mes prêts', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -124,7 +134,8 @@ function StuffStackScreen() {
             <StuffStack.Screen name="AddStuff"
             component={AddStuff} 
             options={({route, navigation}) => (
-                {headerTitle: 'Prêt d\'objet', 
+                {headerTitle: 'Prêt d\'objet',
+                headerTintColor: '#707070', 
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -133,6 +144,7 @@ function StuffStackScreen() {
             component={ItemDetails} 
             options={({route, navigation}) => (
                 {headerTitle: 'Détails', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -148,6 +160,7 @@ function TestStackScreen() {
             component={Test} 
             options={({route, navigation}) => (
                 {headerTitle: 'Test', 
+                headerTintColor: '#707070',
                 route: {route}, 
                 navigation: {navigation}}
             )}

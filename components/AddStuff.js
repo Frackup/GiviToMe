@@ -198,7 +198,7 @@ class AddStuff extends React.Component {
                         <Text style={styles.title_text_view}>Renseignez vos informations</Text>
                     </View>
                     <View style={styles.data_container}>
-                        <Text style={styles.text_view}>Intitulé :</Text>
+                        <Text style={styles.text_view}>Intitulé</Text>
                             <TextInput style={styles.data_input}
                             clearButtonMode="always"
                             value={this.state.title}
@@ -207,12 +207,12 @@ class AddStuff extends React.Component {
                             returnKeyType="done"/>
                             {this._showMandatory(this.state.titleAlert)}
 
-                        <Text style={styles.text_view}>Date du prêt :</Text>
+                        <Text style={styles.text_view}>Date du prêt</Text>
                         <TouchableOpacity onPress={this._datepicker}>
                             <Moment style={styles.data_input} element={Text} format="DD/MM/YYYY" date={date}/>
                         </TouchableOpacity>
                         
-                        <Text style={styles.text_view}>Quantité à prêter :</Text>
+                        <Text style={styles.text_view}>Quantité à prêter</Text>
                         <TextInput style={styles.data_input}
                         keyboardType="numeric"
                         value={this.state.quantity.toString()}
@@ -222,7 +222,7 @@ class AddStuff extends React.Component {
                         onChangeText={(text) => this.setState({quantity: parseInt(text)})} />
                         {this._showMandatory(this.state.quantityAlert)}
 
-                        <Text style={styles.text_view}>Personne impliquée :</Text>
+                        <Text style={styles.text_view}>Personne impliquée</Text>
                             <TextInput style={styles.data_input}
                             clearButtonMode="always"
                             returnKeyType="done"
@@ -275,7 +275,9 @@ const styles=StyleSheet.create({
         fontSize: 15,
         marginTop: 10,
         marginBottom: 6,
-        marginLeft: 10
+        marginLeft: 10,
+        color: '#707070',
+        alignSelf: 'center'
     },
     data_input: {
         fontSize: 15,
@@ -283,7 +285,8 @@ const styles=StyleSheet.create({
         borderRadius: 5,
         marginLeft: 10,
         marginRight: 10,
-        padding: 3
+        padding: 3,
+        borderColor: '#2AA4A8'
     },
     button_container: {
         flex: 1

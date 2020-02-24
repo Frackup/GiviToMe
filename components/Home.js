@@ -15,13 +15,8 @@ import { Ionicons } from '@expo/vector-icons'
 import firebase from '../config/Firebase'
 
 /* TODO:
-- Il faut ajouter les fonctions pour afficher l'argent total que l'on a prêté.
-- Il faut aussi ajouter le nombre d'objets que l'on a prêté.
 - Penser à uniformiser en ne chargeant qu'une vue détail (au lieu des 2 vues money et stuff) car elles afficheront toutes 2 une liste
-- Voir ensuite pour remplir la vue avec une liste de prêts d'argent ou d'objets en fonction du bouton cliqué.
-- Penser aussi à l'action sur le bouton d'ajout qui dépendra du bouton cliqué.
  */
-//const navigation = useNavigation()
 
 class Home extends React.Component {
 
@@ -37,6 +32,7 @@ class Home extends React.Component {
         }
     }
 
+/*
     _onCollectionUpdate = (querySnapshot) => {
         querySnapshot.forEach((globalData) => {
             const { totalMoney, totalQuantity } = globalData.data()
@@ -47,51 +43,47 @@ class Home extends React.Component {
             })
         })
     }
-/*
-    _getFirebaseData() {
+*/
+
+    _getGlobalData() {
         let query = this.ref.get()
         .then(snapshot => {
             if (snapshot.empty) {
-              console.log('No matching documents.');
-              return;
+            console.log('No matching data.');
+            return;
             }  
-        
-            snapshot.forEach(globalData => {
-                const { totalMoney, totalQuantity } = globalData.data()
-                console.log(globalData.data())
-                this.setState({
-                    totalMoney: totalMoney,
-                    totalQuantity: totalQuantity,
-                    isLoading: false,
-                })
+
+            snapshot.forEach(myData => {
+            const { totalMoney, totalQuantity } = myData.data()
+            this.setState({
+                totalMoney: totalMoney,
+                totalQuantity: totalQuantity,
+                isLoading: false,
+            })
             });
-          })
-          .catch(err => {
+        })
+        .catch(err => {
             console.log('Error getting documents', err);
-          });
+        });
     }
-*/
+
     _updateNavigationParams() {
         const navigation = this.props.navigation
-        const route = this.props.route
 
-        navigation.setParams({
-          goToSettings: this._goToSettings
-        })
+        let settingsIconName
+        (Platform.OS === 'android') ? settingsIconName = 'md-settings' : settingsIconName = 'ios-settings'
 
         navigation.setOptions({
             headerRight: () => <TouchableOpacity style={styles.settings_touchable_headerrightbutton}
-                            onPress={() => route.params.goToSettings()}>
-                            <Image style={styles.settings_image}
-                            source={require('../assets/icons/ic_settings.png')} />
+                            onPress={() => this._goToSettings()}>
+                                <Ionicons name={settingsIconName} style={styles.settings_image} />
             </TouchableOpacity>
         })
     }
 
     componentDidMount(){
         this._updateNavigationParams()
-        this.unsubscribe = this.ref.onSnapshot(this._onCollectionUpdate)
-        //this._getFirebaseData()
+        this._getGlobalData()
     }
 
     _addMoney(){
@@ -107,48 +99,39 @@ class Home extends React.Component {
     }
 
     render(){
-        //const date = new Date();
-        //const { navigation } = this.props;
 
-        let iconName
-        (Platform.OS === 'android') ? iconName = 'md-add' : iconName = 'ios-add'
+        const iconName = (Platform.OS === 'android') ? 'md-add' : 'ios-add'
 
         return(
             <View style={styles.main_container}>
                 <View style={styles.header_view}>
                     <Text style={styles.header_text}>GiViToMe</Text>
-                    {/*
-                    <Text style={styles.header_text}>Nous sommes le :{' '}
-                    {/* TODO: Penser à gérer ensuite les formats de date étrangers}
-                        <Moment element={Text} format="DD/MM/YYYY" date={date}/>
-                    </Text>
-                    */}
                 </View>
 
                 <View style={styles.lend_view}>
 
                         <View style={styles.lend_header}>
                             <Image source={require('../assets/icons/dash.png')}/>
-                            <Text style={styles.lend_title}>Money</Text>
+                            <Text style={styles.lend_title}>Argent</Text>
                         </View>
                         <View style={styles.lend_content}>
                             <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
                             {/* TODO: Gérer la localization pour afficher soit € soit $ */}
                             <Text style={styles.lend_text}>{this.state.totalMoney} €</Text>
                             <TouchableOpacity style={styles.add_button} onPress={() => {this._addMoney()}}>
-                                <Ionicons name={iconName} size={60} color='#ED6D6D' />
+                                <Ionicons name={iconName} style={styles.icon_style} />
                             </TouchableOpacity>
                         </View>
 
                         <View style={styles.lend_header}>
                             <Image source={require('../assets/icons/dash.png')}/>
-                            <Text style={styles.lend_title}>Stuff</Text>
+                            <Text style={styles.lend_title}>Objets</Text>
                         </View>
                         <View style={styles.lend_content}>
                             <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
                             <Text style={styles.lend_text}>{this.state.totalQuantity}</Text>
                             <TouchableOpacity style={styles.add_button} onPress={() => {this._addStuff()}}>
-                                <Ionicons name={iconName} size={60} color='#ED6D6D' />
+                                <Ionicons name={iconName} style={styles.icon_style} />
                             </TouchableOpacity>
                         </View>
 
@@ -175,7 +158,7 @@ const styles = StyleSheet.create({
     header_text: {
         textAlign: 'center',
         fontSize: 35,
-        color: '#ED6D6D'
+        color: '#2AA4A8'
     },
     lend_view: {
         flex: 3,
@@ -190,7 +173,8 @@ const styles = StyleSheet.create({
     },
     lend_title: {
         fontSize: 25,
-        marginLeft: 10
+        marginLeft: 10,
+        color: '#707070'
     },
     lend_text: {
         fontSize: 25,
@@ -211,7 +195,11 @@ const styles = StyleSheet.create({
     },
     home_img: {
         position: 'absolute',
-        marginRight: 10
+        marginRight: 10,
+    },
+    icon_style: {
+        fontSize: 60,
+        color: '#2AA4A8'
     },
     footer_view: {
         flex: 1,
@@ -223,9 +211,9 @@ const styles = StyleSheet.create({
         margin: 10
     },
     settings_image: {
-        width: 25,
-        height: 25,
-        marginRight: 10
+        fontSize: 30,
+        marginRight: 10,
+        color: '#2AA4A8'
     }
 })
 

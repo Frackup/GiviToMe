@@ -5,6 +5,7 @@ import { StyleSheet, View, Image, Platform, FlatList, ActivityIndicator } from '
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import MyItem from './MyItem'
 import firebase from '../config/Firebase'
+import { Ionicons } from '@expo/vector-icons'
 
 /*TODO:
 - Finaliser le branchement firebase
@@ -28,7 +29,8 @@ class LendList extends React.Component {
         } else {
             this.ref = firebase.firestore().collection('people')
         }
-        this.unsubscribe = null
+        this.globalData = firebase.firestore().collection('globalData')
+
         this.state = { 
             moneyList: [],
             stuffList: [],
@@ -37,75 +39,105 @@ class LendList extends React.Component {
         }
     }
 
-    _onCollectionUpdate = (querySnapshot) => {
+    _getFirebaseData() {
         const type = this.props.route.params?.type ?? 'defaultValue'
 
         if (type === 'Money'){
             const moneyList = [];
-            querySnapshot.forEach((money) => {
-                const { title, amount, date, people } = money.data()
-                moneyList.push({
-                key: money.id,
-                title,
-                amount,
-                date: (date.toString().length > 0) ? new Date(date.seconds*1000) : new Date(),
-                people
+
+            let query = this.ref.get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                console.log('No matching data.');
+                return;
+                }  
+
+                snapshot.forEach(money => {
+                
+                    const { title, amount, date, people } = money.data()
+                    moneyList.push({
+                        key: money.id,
+                        title,
+                        amount,
+                        date: (date.toString().length > 0) ? new Date(date.seconds*1000) : new Date(),
+                        people
+                    })
+                })
+                this.setState({
+                    moneyList: moneyList,
+                    isLoading: false,
                 })
             })
-            this.setState({
-                moneyList: moneyList,
-                isLoading: false,
-            })
+            .catch(err => {
+                console.log('Error getting documents', err);
+            });
         } else if (type === 'Stuff'){
             const stuffList = [];
-            querySnapshot.forEach((stuff) => {
 
-                const { title, quantity, date, people } = stuff.data()
+            let query = this.ref.get()
+            .then(snapshot => {
+                if (snapshot.empty) {
+                console.log('No matching data.');
+                return;
+                }  
+
+                snapshot.forEach(stuff => {
+                
+                    const { title, quantity, date, people } = stuff.data()
                 stuffList.push({
-                key: stuff.id,
-                title,
-                quantity,
-                date: (date.toString().length > 0) ? new Date(date.seconds*1000) : new Date(),
-                people
+                    key: stuff.id,
+                    title,
+                    quantity,
+                    date: (date.toString().length > 0) ? new Date(date.seconds*1000) : new Date(),
+                    people
+                    })
+                })
+                this.setState({
+                    stuffList: stuffList,
+                    isLoading: false,
                 })
             })
-            this.setState({
-                stuffList: stuffList,
-                isLoading: false,
-            })
-        } else {
-            const peopleList = [];
-            querySnapshot.forEach((people) => {
-
-                const { firstName, lastName } = people.data();
-                peopleList.push({
-                key: people.id,
-                firstName,
-                lastName
-                });
-            });
-            this.setState({
-                peopleList: peopleList,
-                isLoading: false,
+            .catch(err => {
+                console.log('Error getting documents', err);
             });
         }
     }
 
+    _getGlobalData() {
+        let query = this.globalData.get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+            console.log('No matching data.');
+            return;
+            }  
+
+            snapshot.forEach(myData => {
+            const { totalMoney, totalQuantity } = myData.data()
+            this.setState({
+                totalMoney: totalMoney,
+                totalQuantity: totalQuantity,
+                isLoading: false,
+            })
+            });
+        })
+        .catch(err => {
+            console.log('Error getting documents', err);
+        });
+    }
+
     _updateNavigationParams() {
         const navigation = this.props.navigation
-        const route = this.props.route
-        const type = route.params?.type ?? 'defaultValue'
+        const type = this.props.route.params?.type ?? 'defaultValue'
 
-        navigation.setParams({
-          addItem: this._addItem
-        })
+        let addIconName
+        addIconName = ((Platform.OS == 'android') ? 'md-add' : 'ios-add')
+
 
         if (Platform.OS === "ios" && type !== 'People'){
             navigation.setOptions({
                         headerRight: () => <TouchableOpacity style={styles.add_touchable_headerrightbutton}
-                                        onPress={() => route.params.addItem()}>
-                                        <Image style={styles.add_image}
-                                        source={require('../assets/icons/ic_add.png')} />
+                                        onPress={() => this._addItem()}>
+                                        <Ionicons name={addIconName} style={styles.add_image} />
                         </TouchableOpacity>
                 })
             }
@@ -113,11 +145,11 @@ class LendList extends React.Component {
 
     componentDidMount(){
         this._updateNavigationParams()
-        this.unsubscribe = this.ref.onSnapshot(this._onCollectionUpdate)
+        this._getFirebaseData()
+        this._getGlobalData()
     }
 
     _addItem(){
-        // Créer la fonction pour permettre d'ajouter soit un prêt d'argent ou un prêt d'objet.
         const type = this.props.route.params?.type ?? 'defaultValue'
 
         if (type === 'Money'){
@@ -146,7 +178,6 @@ class LendList extends React.Component {
     }
 
     _displayDetailsForMyItem = (idItem, type) => {
-        // TODO : implémenter la page de détail d'un item (myItemPage par exemple ... A créer)
         this.props.navigation.navigate('ItemDetails', { idMyItem: idItem, type: type })
     }
 
@@ -162,13 +193,18 @@ class LendList extends React.Component {
         }
     }
 
+    _deleteItem = (idItem, type) => {
+        alert('Delete button pressed')
+        console.log(type)
+    }
+
     render(){
         const type = this.props.route.params?.type ?? 'defaultValue'
 
         if(this.state.isLoading){
             return(
               <View style={styles.activity}>
-                <ActivityIndicator size="large" color="#0000ff"/>
+                <ActivityIndicator size="large" color="#ED6D6D"/>
               </View>
             )
         }
@@ -181,7 +217,8 @@ class LendList extends React.Component {
                 renderItem={({item}) => <MyItem 
                     myItem={item}
                     itemType={type}
-                    displayDetailsForMyItem={this._displayDetailsForMyItem}/>}
+                    displayDetailsForMyItem={this._displayDetailsForMyItem}
+                    deleteItem={(item) => this._deleteItem(item.id, type)}/>}
                 onEndReachedThreshold={0.5}
                 onEndReached={() => {
                 }}
@@ -191,6 +228,9 @@ class LendList extends React.Component {
 }
 
 const styles=StyleSheet.create({
+    total_container: {
+        flex: 0.2
+    },
     main_container: {
         flex: 1,
         justifyContent: 'center',
@@ -200,8 +240,9 @@ const styles=StyleSheet.create({
         marginRight: 8
     },
     add_image: {
-        width: 25,
-        height: 25
+        marginRight: 10,
+        fontSize: 30,
+        color: '#2AA4A8'
     },
     add_touchable_floatingactionbutton: {
         position: 'absolute',
