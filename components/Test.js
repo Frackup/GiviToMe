@@ -1,35 +1,78 @@
-import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
-import * as Contacts from 'expo-contacts';
+// components/Test.js
 
-export default function App() {
-  useEffect(() => {
-    (async () => {
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === 'granted') {
-        const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.Emails],
+import React from 'react'
+import { View, Text, Picker, StyleSheet, TextInput, Keyboard, Alert, Button } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
+class Test extends React.Component {
+
+    state = {user: 'toto',
+        show: false
+    }
+
+    updateUser = (user) => {
+        this.setState({ user: user })
+    }
+
+    _picker = () => {
+        this._show()
+    }
+
+    _show = () => {
+        this.setState({
+            show: true,
         });
+        Keyboard.dismiss()
+    }
 
-        if (data.length > 0) {
-            for (let i=0; i<5; i++) {
-                const contact = data[i];
-                console.log(contact);
-            }
-        }
-      }
-    })();
-  }, []);
+    _updateData = () => {
+        this.setState({
+            show: false,
+        })
+    }
 
-  return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      <Text>Contacts Module Example</Text>
-    </View>
-  );
+    render(){
+        return(
+            <View style={styles.container}>
+                <Text>This is the Settings Page</Text>
+
+                <TouchableOpacity onPress={this._picker}>
+                    <Text style={styles.text}>{this.state.user}</Text>
+                </TouchableOpacity>
+
+                {this.state.show && 
+                <View style={styles.button_container}>
+                    <Button style={styles.validation_button}
+                    title="Valider" onPress={this._updateData} />
+                </View>
+                }
+                {this.state.show &&
+                <Picker selectedValue = {this.state.user} onValueChange = {this.updateUser}>
+                    <Picker.Item label = "Steve" value = "steve" />
+                    <Picker.Item label = "Ellen" value = "ellen" />
+                    <Picker.Item label = "Maria" value = "maria" />
+                </Picker>}
+            
+            </View>
+        )
+    }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    text: {
+       fontSize: 25,
+       margin: 5,
+       color: 'red',
+       borderRadius: 5,
+       borderWidth: 2,
+       padding: 3
+    },
+    button_container: {
+        flex: 1
+    }
+ })
+
+export default Test

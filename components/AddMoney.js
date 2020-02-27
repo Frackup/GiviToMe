@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import Moment from 'react-moment'
 
 import firebase from '../config/Firebase'
+import MoneyAccess from '../dbaccess/MoneyData.js'
 
 class AddMoney extends React.Component {
 
@@ -89,23 +90,19 @@ class AddMoney extends React.Component {
     _addMoney() {
         const newTotalAmount = parseInt(this.state.totalMoney) + parseInt(this.state.amount)
 
-        // Ajout du prêt d'argent en BDD
-        this.ref.add({
-            title: this.state.title,
-            amount: this.state.amount,
-            date: this.state.date,
-            people: this.state.people
-        }).then((docRef) => {
-            this.setState({
+        MoneyAccess.addMoney(
+            this.state.title,
+            this.state.amount,
+            this.state.date,
+            this.state.people
+        )
+
+        this.setState({
             title: '',
             amount: 0,
             date: new Date(),
             people: ''
             });
-        })
-        .catch((error) => {
-            console.error("Error adding money: ", error);
-        });
 
         // Mise à jour du total prêté dans la table des données globales
         const updateRef = firebase.firestore().collection('globalData').doc(this.state.globalDataId);
@@ -147,26 +144,31 @@ class AddMoney extends React.Component {
         if(this.state.title === ""){
             this.setState({ titleAlert: true })
             dataComplete= false
+        } else {
+            this.setState({ titleAlert: false })
         }
         if(this.state.amount === 0){
             this.setState({ amountAlert: true })
             dataComplete= false
+        } else {
+            this.setState({ amountAlert: false })
         }
         if(this.state.people === ""){
             this.setState({ peopleAlert: true })
             dataComplete= false
+        } else {
+            this.setState({ peopleAlert: false })
         }
 
         return dataComplete
     }
 
-    _processDataOnFocus(value){
+    _processDataOnFocus(){
         const amount = this.state.amount
         this.setState({
             displayedAmount: amount
         })
         this._hideDP()
-        this.setState({ value: false })
     }
 
     _resetData() {
@@ -205,9 +207,8 @@ class AddMoney extends React.Component {
         }
     }
 
-    _dataProcessing(value){
+    _dataProcessing(){
         this._hideDP()
-        this.setState({ value: false })
     }
 
     render(){
@@ -225,7 +226,7 @@ class AddMoney extends React.Component {
                             clearButtonMode="always"
                             value={this.state.title}
                             onChangeText={(text) => this.setState({title: text})}
-                            onFocus={() => this._dataProcessing("titleAlert")}
+                            onFocus={() => this._dataProcessing()}
                             returnKeyType="done"/>
                             {this._showMandatory(this.state.titleAlert)}
 
@@ -235,22 +236,22 @@ class AddMoney extends React.Component {
                         </TouchableOpacity>
                         
                         <Text style={styles.text_view}>Montant à prêter</Text>
-                        <TextInput style={styles.data_input}
-                        keyboardType="numeric"
-                        value={this.state.displayedAmount}
-                        clearButtonMode="always"
-                        returnKeyType="done"
-                        onFocus={() => this._processDataOnFocus("amountAlert")}
-                        onSubmitEditing={() => this._formatDisplayedAmount()}
-                        onChangeText={(text) => this._saveStateAmount(text)} />
-                        {this._showMandatory(this.state.amountAlert)}
+                            <TextInput style={styles.data_input}
+                            keyboardType="numeric"
+                            value={this.state.displayedAmount}
+                            clearButtonMode="always"
+                            returnKeyType="done"
+                            onFocus={() => this._processDataOnFocus()}
+                            onSubmitEditing={() => this._formatDisplayedAmount()}
+                            onChangeText={(text) => this._saveStateAmount(text)} />
+                            {this._showMandatory(this.state.amountAlert)}
 
                         <Text style={styles.text_view}>Personne impliquée</Text>
                             <TextInput style={styles.data_input}
                             clearButtonMode="always"
                             returnKeyType="done"
                             value={this.state.people}
-                            onFocus={() => this._dataProcessing("peopleAlert")}
+                            onFocus={() => this._dataProcessing()}
                             onChangeText={(text) => {this.setState({ people: text })}}/>
                             {this._showMandatory(this.state.peopleAlert)}
                     </View>

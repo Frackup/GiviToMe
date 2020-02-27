@@ -6,12 +6,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import MyItem from './MyItem'
 import firebase from '../config/Firebase'
 import { Ionicons } from '@expo/vector-icons'
+import StuffAccess from '../dbaccess/StuffData.js'
+import MoneyAccess from '../dbaccess/MoneyData.js'
+import GlobalAccess from '../dbaccess/GlobalData.js'
 
 /*TODO:
-- Finaliser le branchement firebase
-- permettre de supprimer un prêt d'argent ou d'objet
 - permettre de parcourir la liste des prêts d'argent ou d'objet réalisés et de l'ordonner selon certains critères 
 - (par montant, date, type, ...)
+- PErmettre d'éditer un prêt
 */
 
 class LendList extends React.Component {
@@ -22,13 +24,6 @@ class LendList extends React.Component {
 
         this._addItem = this._addItem.bind(this)
 
-        if (type === 'Money'){
-            this.ref = firebase.firestore().collection('money')
-        } else if (type === 'Stuff') {
-            this.ref = firebase.firestore().collection('stuff')
-        } else {
-            this.ref = firebase.firestore().collection('people')
-        }
         this.globalData = firebase.firestore().collection('globalData')
 
         this.state = { 
@@ -39,68 +34,30 @@ class LendList extends React.Component {
         }
     }
 
-    _getFirebaseData() {
+    _getData() {
         const type = this.props.route.params?.type ?? 'defaultValue'
 
         if (type === 'Money'){
-            const moneyList = [];
-
-            let query = this.ref.get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                console.log('No matching data.');
-                return;
-                }  
-
-                snapshot.forEach(money => {
-                
-                    const { title, amount, date, people } = money.data()
-                    moneyList.push({
-                        key: money.id,
-                        title,
-                        amount,
-                        date: (date.toString().length > 0) ? new Date(date.seconds*1000) : new Date(),
-                        people
-                    })
-                })
-                this.setState({
-                    moneyList: moneyList,
-                    isLoading: false,
-                })
+            const moneyList = MoneyAccess.getMoneyData()
+            this.setState({
+                moneyList: moneyList,
+                isLoading: false,
             })
-            .catch(err => {
-                console.log('Error getting documents', err);
-            });
         } else if (type === 'Stuff'){
-            const stuffList = [];
-
-            let query = this.ref.get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                console.log('No matching data.');
-                return;
-                }  
-
-                snapshot.forEach(stuff => {
-                
-                    const { title, quantity, date, people } = stuff.data()
-                stuffList.push({
-                    key: stuff.id,
-                    title,
-                    quantity,
-                    date: (date.toString().length > 0) ? new Date(date.seconds*1000) : new Date(),
-                    people
-                    })
-                })
-                this.setState({
-                    stuffList: stuffList,
-                    isLoading: false,
-                })
+            const stuffList = StuffAccess.getStuffData()
+            console.log(stuffList)
+            this.setState({
+                stuffList: stuffList,
+                isLoading: false,
             })
-            .catch(err => {
-                console.log('Error getting documents', err);
-            });
         }
+
+        const { totalMoney, totalQuantity } = GlobalAccess.getGlobal()
+        this.setState({
+            totalMoney: totalMoney,
+            totalQuantity: totalQuantity,
+            isLoading: false,
+        })
     }
 
     _getGlobalData() {
@@ -112,12 +69,12 @@ class LendList extends React.Component {
             }  
 
             snapshot.forEach(myData => {
-            const { totalMoney, totalQuantity } = myData.data()
-            this.setState({
-                totalMoney: totalMoney,
-                totalQuantity: totalQuantity,
-                isLoading: false,
-            })
+                const { totalMoney, totalQuantity } = myData.data()
+                this.setState({
+                    totalMoney: totalMoney,
+                    totalQuantity: totalQuantity,
+                    isLoading: false,
+                })
             });
         })
         .catch(err => {
@@ -145,8 +102,8 @@ class LendList extends React.Component {
 
     componentDidMount(){
         this._updateNavigationParams()
-        this._getFirebaseData()
-        this._getGlobalData()
+        this._getData()
+        //this._getGlobalData()
     }
 
     _addItem(){
@@ -194,8 +151,19 @@ class LendList extends React.Component {
     }
 
     _deleteItem = (idItem, type) => {
-        alert('Delete button pressed')
-        console.log(type)
+        (type === 'Money') ? MoneyAccess.deleteMoney(idItem) : StuffAccess.deleteStuff(idItem)
+        alert(type + ' deleted')
+
+        if (type === 'Money') {
+            this.setState({
+                moneyList: this.state.moneyList.filter(item => item.key != idItem)
+            })
+        } else {
+            this.setState({
+                stuffList: this.state.stuffList.filter(item => item.key != idItem)
+            })
+        }
+        
     }
 
     render(){
@@ -218,7 +186,7 @@ class LendList extends React.Component {
                     myItem={item}
                     itemType={type}
                     displayDetailsForMyItem={this._displayDetailsForMyItem}
-                    deleteItem={(item) => this._deleteItem(item.id, type)}/>}
+                    deleteItem={this._deleteItem}/>}
                 onEndReachedThreshold={0.5}
                 onEndReached={() => {
                 }}

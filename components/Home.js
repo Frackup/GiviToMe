@@ -14,6 +14,8 @@ import { StyleSheet, Text, Image, View, TouchableOpacity, Platform } from 'react
 import { Ionicons } from '@expo/vector-icons'
 import firebase from '../config/Firebase'
 
+import GlobalAccess from '../dbaccess/GlobalData.js'
+
 /* TODO:
 - Penser à uniformiser en ne chargeant qu'une vue détail (au lieu des 2 vues money et stuff) car elles afficheront toutes 2 une liste
  */
@@ -32,18 +34,14 @@ class Home extends React.Component {
         }
     }
 
-/*
-    _onCollectionUpdate = (querySnapshot) => {
-        querySnapshot.forEach((globalData) => {
-            const { totalMoney, totalQuantity } = globalData.data()
-            this.setState({
-                totalMoney: totalMoney,
-                totalQuantity: totalQuantity,
-                isLoading: false,
-            })
+    _getData(){
+        const { totalMoney, totalQuantity } = GlobalAccess.getGlobal()
+        this.setState({
+            totalMoney: totalMoney,
+            totalQuantity: totalQuantity,
+            isLoading: false,
         })
     }
-*/
 
     _getGlobalData() {
         let query = this.ref.get()
@@ -55,6 +53,8 @@ class Home extends React.Component {
 
             snapshot.forEach(myData => {
             const { totalMoney, totalQuantity } = myData.data()
+            console.log('TotalM_Home : ' + totalMoney)
+            console.log('TotalQ_Home : ' + totalQuantity)
             this.setState({
                 totalMoney: totalMoney,
                 totalQuantity: totalQuantity,
@@ -83,6 +83,7 @@ class Home extends React.Component {
 
     componentDidMount(){
         this._updateNavigationParams()
+        //this._getData()
         this._getGlobalData()
     }
 

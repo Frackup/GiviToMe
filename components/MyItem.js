@@ -35,7 +35,7 @@ class MyItem extends React.Component{
 
             return (
                 <>
-                    <TouchableOpacity onPress={() => this.props.deleteItem(myItem.key, 'toto')}>
+                    <TouchableOpacity onPress={() => this.props.deleteItem(myItem.key, this.props.itemType)}>
                         <View
                             style={{ flex: 1, backgroundColor: 'red', justifyContent: 'center' }}>
                             <Animated.Text
@@ -75,8 +75,8 @@ class MyItem extends React.Component{
 
                     <View style={styles.first_line}>
                         <View style={styles.left_part_container}>
+                            <Image style={styles.date_bg} source={require('../assets/icons/list_bg.png')} />
                             <View style={styles.date_container}>
-                                <Image style={styles.date_bg} source={require('../assets/icons/list_bg.png')} />
                                 <Ionicons name={calIconName} style={styles.top_left_elmnts} />
                                 <Moment style={styles.top_left_elmnts} element={Text} format="DD/MM/YYYY" date={myItem.date} />
                             </View>
@@ -114,19 +114,16 @@ const styles=StyleSheet.create({
     },
     top_left_elmnts: {
         marginLeft: 10,
-        marginTop: 5,
         fontSize: 15,
         color: '#FFFFFF'
     },
     top_right_elmnts: {
         marginRight: 10,
-        marginTop: 5,
         fontSize: 15,
         color: '#2AA4A8'
     },
     btm_left_elmnts:{
         marginLeft: 10,
-        marginBottom: 5,
         fontSize: 15,
         color: '#2AA4A8'
     },
@@ -146,17 +143,20 @@ const styles=StyleSheet.create({
     },
     date_container: {
         position: 'absolute',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     left_part_container: {
         width: '50%',
         flexDirection: 'row',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     },
     right_part_container: {
         width: '50%',
         justifyContent: 'flex-end',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     main_data: {
         justifyContent: 'center',
