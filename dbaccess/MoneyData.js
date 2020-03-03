@@ -2,16 +2,16 @@
 
 import firebase from '../config/Firebase'
 
-class MoneyData {
+export default class MoneyData {
 
     constructor() {
         this.money = firebase.firestore().collection('money');
     }
 
-    getMoneyData(){
+    async getMoneyData(){
         const moneyList = [];
 
-        let query = this.money.get()
+        let query = await this.money.get()
         .then(snapshot => {
             if (snapshot.empty) {
             console.log('No money data.');
@@ -37,6 +37,26 @@ class MoneyData {
         return moneyList
     }
 
+    async totalMoney() {
+        let totalMoney = 0
+
+        let query = await this.money.get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+            console.log('No money data.')
+            return [];
+            }  
+
+            snapshot.forEach(money => {
+                totalMoney += parseInt(money.data().amount)
+            })
+        })
+        .catch(err => {
+            console.log('Error getting money data : ', err);
+        })
+        return totalMoney
+    }
+
     addMoney(title, amount, date, people) {
         // Ajout du prêt d'argent en BDD
         this.money.add({
@@ -60,6 +80,3 @@ class MoneyData {
     }
 
 }
-
-const moneyData = new MoneyData()
-export default moneyData

@@ -12,12 +12,12 @@ un appel à la DB.
 import React from 'react'
 import { StyleSheet, Text, Image, View, TouchableOpacity, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-import firebase from '../config/Firebase'
+//import firebase from '../config/Firebase'
 
-import GlobalAccess from '../dbaccess/GlobalData.js'
+import StuffData from '../dbaccess/StuffData'
+import MoneyData from '../dbaccess/MoneyData'
 
 /* TODO:
-- Penser à uniformiser en ne chargeant qu'une vue détail (au lieu des 2 vues money et stuff) car elles afficheront toutes 2 une liste
  */
 
 class Home extends React.Component {
@@ -25,46 +25,13 @@ class Home extends React.Component {
     constructor(props) {
         super(props)
         this._goToSettings = this._goToSettings.bind(this)
-        this.ref = firebase.firestore().collection('globalData')
+        //this.ref = firebase.firestore().collection('globalData')
 
         this.state = { 
             totalMoney: 0,
             totalQuantity: 0,
             isLoading: true
         }
-    }
-
-    _getData(){
-        const { totalMoney, totalQuantity } = GlobalAccess.getGlobal()
-        this.setState({
-            totalMoney: totalMoney,
-            totalQuantity: totalQuantity,
-            isLoading: false,
-        })
-    }
-
-    _getGlobalData() {
-        let query = this.ref.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-            console.log('No matching data.');
-            return;
-            }  
-
-            snapshot.forEach(myData => {
-            const { totalMoney, totalQuantity } = myData.data()
-            console.log('TotalM_Home : ' + totalMoney)
-            console.log('TotalQ_Home : ' + totalQuantity)
-            this.setState({
-                totalMoney: totalMoney,
-                totalQuantity: totalQuantity,
-                isLoading: false,
-            })
-            });
-        })
-        .catch(err => {
-            console.log('Error getting documents', err);
-        });
     }
 
     _updateNavigationParams() {
@@ -81,10 +48,27 @@ class Home extends React.Component {
         })
     }
 
+    _getData() {
+        let myStuff = new StuffData();
+        myStuff.totalStuff().then(val => { this.setState({
+            totalQuantity: val
+            })
+        })
+        .catch(error => {
+            console.error(error)
+        })
+
+        let myMoney = new MoneyData();
+        myMoney.totalMoney().then(val => { this.setState({
+            totalMoney: val
+            })
+        })
+    }
+
     componentDidMount(){
         this._updateNavigationParams()
-        //this._getData()
-        this._getGlobalData()
+        this._getData()
+        //this._getGlobalData()
     }
 
     _addMoney(){

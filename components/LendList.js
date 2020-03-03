@@ -6,9 +6,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import MyItem from './MyItem'
 import firebase from '../config/Firebase'
 import { Ionicons } from '@expo/vector-icons'
-import StuffAccess from '../dbaccess/StuffData.js'
-import MoneyAccess from '../dbaccess/MoneyData.js'
-import GlobalAccess from '../dbaccess/GlobalData.js'
+import StuffData from '../dbaccess/StuffData'
+import MoneyData from '../dbaccess/MoneyData'
 
 /*TODO:
 - permettre de parcourir la liste des prêts d'argent ou d'objet réalisés et de l'ordonner selon certains critères 
@@ -24,8 +23,6 @@ class LendList extends React.Component {
 
         this._addItem = this._addItem.bind(this)
 
-        this.globalData = firebase.firestore().collection('globalData')
-
         this.state = { 
             moneyList: [],
             stuffList: [],
@@ -38,48 +35,23 @@ class LendList extends React.Component {
         const type = this.props.route.params?.type ?? 'defaultValue'
 
         if (type === 'Money'){
-            const moneyList = MoneyAccess.getMoneyData()
-            this.setState({
-                moneyList: moneyList,
-                isLoading: false,
-            })
-        } else if (type === 'Stuff'){
-            const stuffList = StuffAccess.getStuffData()
-            console.log(stuffList)
-            this.setState({
-                stuffList: stuffList,
-                isLoading: false,
-            })
-        }
-
-        const { totalMoney, totalQuantity } = GlobalAccess.getGlobal()
-        this.setState({
-            totalMoney: totalMoney,
-            totalQuantity: totalQuantity,
-            isLoading: false,
-        })
-    }
-
-    _getGlobalData() {
-        let query = this.globalData.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-            console.log('No matching data.');
-            return;
-            }  
-
-            snapshot.forEach(myData => {
-                const { totalMoney, totalQuantity } = myData.data()
+            let myMoney = new MoneyData()
+            myMoney.getMoneyData().then(val => {
                 this.setState({
-                    totalMoney: totalMoney,
-                    totalQuantity: totalQuantity,
+                    moneyList: val,
                     isLoading: false,
                 })
-            });
-        })
-        .catch(err => {
-            console.log('Error getting documents', err);
-        });
+            })
+            
+        } else if (type === 'Stuff'){
+            let myStuff = new StuffData()
+            myStuff.getStuffData().then(val => {
+                this.setState({
+                    stuffList: val,
+                    isLoading: false,
+                })
+            })
+        }
     }
 
     _updateNavigationParams() {
@@ -103,7 +75,6 @@ class LendList extends React.Component {
     componentDidMount(){
         this._updateNavigationParams()
         this._getData()
-        //this._getGlobalData()
     }
 
     _addItem(){

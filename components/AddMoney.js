@@ -7,14 +7,12 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import Moment from 'react-moment'
 
 import firebase from '../config/Firebase'
-import MoneyAccess from '../dbaccess/MoneyData.js'
+import MoneyData from '../dbaccess/MoneyData'
 
 class AddMoney extends React.Component {
 
     constructor() {
         super();
-        this.ref = firebase.firestore().collection('money');
-        this.globalData = firebase.firestore().collection('globalData')
 
         this.state = {
             title: "",

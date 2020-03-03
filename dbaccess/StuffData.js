@@ -1,17 +1,20 @@
-// dbaccess/StuffAccess.js
+// dbaccess/StuffData.js
 
 import firebase from '../config/Firebase'
 
-class StuffAccess {
+export default class StuffData {
 
     constructor() {
         this.stuff = firebase.firestore().collection('stuff');
+
     }
 
-    getStuffData(){
-        const stuffList = [];
+    // async function puisque react fonctionne de la sorte. Il ne peut donc transmettre de façon dynamique des données
+    // entre les classes (sinon il pourrait attendre indéfiniment). Il faut ensuite récupérer la promise de l'autre côté.
+    async getStuffData() {
+        const stuffList = []
 
-        let query = this.stuff.get()
+        let query = await this.stuff.get()
         .then(snapshot => {
             if (snapshot.empty) {
             console.log('No stuff data.');
@@ -35,8 +38,27 @@ class StuffAccess {
             console.log('Error getting stuff data : ', err);
         });
 
-        console.log('stufflist : ' + stuffList)
         return stuffList
+    }
+
+    async totalStuff() {
+        let totalQuantity = 0
+
+        let query = await this.stuff.get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+            console.log('No stuff data.')
+            return [];
+            }  
+
+            snapshot.forEach(stuff => {
+                totalQuantity += parseInt(stuff.data().quantity)
+            })
+        })
+        .catch(err => {
+            console.log('Error getting stuff data : ', err);
+        })
+        return totalQuantity
     }
 
     addStuff(title, quantity, date, people, type) {
@@ -62,6 +84,3 @@ class StuffAccess {
         });
     }
 }
-
-const stuffAccess = new StuffAccess();
-export default stuffAccess

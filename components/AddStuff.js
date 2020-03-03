@@ -5,7 +5,7 @@ import { StyleSheet, View, Text, Button, Alert, TouchableOpacity, Keyboard, Pick
 import { TextInput } from 'react-native-gesture-handler'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Moment from 'react-moment'
-import StuffAccess from '../dbaccess/StuffData.js'
+import StuffData from '../dbaccess/StuffData'
 
 import firebase from '../config/Firebase'
 
@@ -13,8 +13,6 @@ class AddStuff extends React.Component {
 
     constructor() {
         super();
-        this.stuff = firebase.firestore().collection('stuff');
-        this.globalData = firebase.firestore().collection('globalData')
 
         this.state = {
             title: "",
@@ -30,29 +28,6 @@ class AddStuff extends React.Component {
             totalQuantity: 0,
             type: "Divers"
         };
-    }
-
-    _getGlobalData() {
-        let query = this.globalData.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-            console.log('No matching data.');
-            return;
-            }  
-
-            snapshot.forEach(myData => {
-            const { totalMoney, totalQuantity } = myData.data()
-            this.setState({
-                globalDataId: myData.id,
-                totalMoney: totalMoney,
-                totalQuantity: totalQuantity,
-                isLoading: false,
-            })
-            });
-        })
-        .catch(err => {
-            console.log('Error getting documents', err);
-        });
     }
 
     _updateNavigationParams() {
@@ -73,7 +48,6 @@ class AddStuff extends React.Component {
 
     componentDidMount() {
         this._updateNavigationParams()
-        this._getGlobalData()
     }
 
     _setDate = (event, date) => {
@@ -122,9 +96,10 @@ class AddStuff extends React.Component {
     }
 
     _addStuff() {
-        const newTotalQuantity = parseInt(this.state.totalQuantity) + parseInt(this.state.quantity)
 
-        StuffAccess.addStuff(
+        let myStuff = new StuffData();
+
+        myStuff.addStuff(
             this.state.title,
             this.state.quantity,
             this.state.date,
@@ -138,24 +113,6 @@ class AddStuff extends React.Component {
             date: new Date(),
             people: ''
             })
-
-        // Mise à jour de la quantité prêtée dans la table des données globales
-        const updateRef = firebase.firestore().collection('globalData').doc(this.state.globalDataId);
-        updateRef.set({
-            totalMoney: this.state.totalMoney,
-            totalQuantity: newTotalQuantity
-        }).then((docRef) => {
-            this.setState({
-                totalQuantity: newTotalQuantity,
-            });
-        })
-        .catch((error) => {
-            console.error("Error updating global data: ", error);
-            this.setState({
-                totalQuantity: newTotalQuantity,
-                isLoading: false,
-            });
-        });
     }
 
     _saveData() {
