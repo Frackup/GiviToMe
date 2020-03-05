@@ -28,31 +28,7 @@ class AddMoney extends React.Component {
         };
     }
 
-    _getGlobalData() {
-        let query = this.globalData.get()
-        .then(snapshot => {
-            if (snapshot.empty) {
-            console.log('No matching data.');
-            return;
-            }  
-
-            snapshot.forEach(myData => {
-            const { totalMoney, totalQuantity } = myData.data()
-            this.setState({
-                globalDataId: myData.id,
-                totalMoney: totalMoney,
-                totalQuantity: totalQuantity,
-                isLoading: false,
-            })
-            });
-        })
-        .catch(err => {
-            console.log('Error getting documents', err);
-        });
-    }
-
     componentDidMount() {
-        this._getGlobalData()
     }
 
     _setDate = (event, date) => {
@@ -86,9 +62,9 @@ class AddMoney extends React.Component {
     }
 
     _addMoney() {
-        const newTotalAmount = parseInt(this.state.totalMoney) + parseInt(this.state.amount)
+        let myMoney = new MoneyData()
 
-        MoneyAccess.addMoney(
+        myMoney.addMoney(
             this.state.title,
             this.state.amount,
             this.state.date,
@@ -101,23 +77,6 @@ class AddMoney extends React.Component {
             date: new Date(),
             people: ''
             });
-
-        // Mise à jour du total prêté dans la table des données globales
-        const updateRef = firebase.firestore().collection('globalData').doc(this.state.globalDataId);
-        updateRef.set({
-            totalMoney: newTotalAmount,
-            totalQuantity: this.state.totalQuantity
-        }).then((docRef) => {
-            this.setState({
-            newTotalAmount: newTotalAmount,
-            });
-        })
-        .catch((error) => {
-            console.error("Error updating global data: ", error);
-            this.setState({
-              isLoading: false,
-            });
-        });
     }
 
     // Fonction pour permettre au bouton affiché de gérer à la fois la validation de la date via DatePicker et aussi

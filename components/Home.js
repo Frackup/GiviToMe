@@ -63,12 +63,27 @@ class Home extends React.Component {
             totalMoney: val
             })
         })
+        .catch(error => {
+            console.error(error)
+        })
     }
 
     componentDidMount(){
+        const { navigation } = this.props
+
+        this.focusListener = navigation.addListener('focus', () => {
+            console.log('coucou')
+            this._getData()
+        });
+        
         this._updateNavigationParams()
-        this._getData()
-        //this._getGlobalData()
+        //this._getData()
+        // Faire en sorte que les fonctions ici se jouent à chaque fois que l'on arrive sur l'écran (gestion du back navigation pour la mise à jour des totaux de prêts)
+    }
+
+    componentWillUnmount() {
+        // Remove the event listener before removing the screen from the stack
+        this.focusListener.remove();
     }
 
     _addMoney(){

@@ -6,8 +6,7 @@ import { TextInput } from 'react-native-gesture-handler'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Moment from 'react-moment'
 import StuffData from '../dbaccess/StuffData'
-
-import firebase from '../config/Firebase'
+import TypeData from '../dbaccess/TypeData'
 
 class AddStuff extends React.Component {
 
@@ -18,7 +17,7 @@ class AddStuff extends React.Component {
             title: "",
             titleAlert: false,
             quantity: 0,
-            displayedQty: "0",
+            displayedQty: "",
             quantityAlert: false,
             date: new Date(),
             people: "",
@@ -26,7 +25,9 @@ class AddStuff extends React.Component {
             showdp: false,
             showpicker: false,
             totalQuantity: 0,
-            type: "Divers"
+            type: "Sélectionner",
+            typeAlert: false,
+            typeList: []
         };
     }
 
@@ -46,8 +47,20 @@ class AddStuff extends React.Component {
             }
     }
 
+    _populateTypes() {
+        let myTypes = new TypeData();
+        myTypes.getTypeData().then(val => { this.setState({
+            typeList: val
+        })
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
     componentDidMount() {
         this._updateNavigationParams()
+        this._populateTypes()
     }
 
     _setDate = (event, date) => {
@@ -146,6 +159,12 @@ class AddStuff extends React.Component {
         } else {
             this.setState({ peopleAlert: false })
         }
+        if(this.state.type === "Sélectionner"){
+            this.setState({ typeAlert: true })
+            dataComplete= false
+        } else {
+            this.setState({ typeAlert: false })
+        }
 
         return dataComplete
     }
@@ -155,7 +174,7 @@ class AddStuff extends React.Component {
             title: "",
             titleAlert: false,
             quantity: 0,
-            displayedQty: "0",
+            displayedQty: "",
             quantityAlert: false,
             date: new Date(),
             people: "",
@@ -179,7 +198,7 @@ class AddStuff extends React.Component {
         if (text != null) {
             const quantity = this.state.quantity
             this.setState({
-                displayedQty: quantity
+                displayedQty: quantity.toString()
             })
         }
         this._hideDP()
@@ -190,7 +209,7 @@ class AddStuff extends React.Component {
     _qtyProcessing(){
         const quantity = this.state.quantity
         this.setState({
-            displayedQty: quantity
+            displayedQty: quantity.toString()
         })
         this._hideDP()
         this._hidePicker()
@@ -200,12 +219,17 @@ class AddStuff extends React.Component {
     _saveStateQty(text) {
         this.setState({ quantity: text })
         this.setState(
-            { displayedQty: text}
+            { displayedQty: text.toString()}
         )
     }
 
     render(){
         const { showdp, showpicker, date } = this.state
+        console.log(this.state.typeList)
+
+        let typeItems = this.state.typeList.map( ( val ) => {
+            return <Picker.Item value={val.label} label={val.label} />
+        })
 
         return(
             <View style={styles.main_view}>
@@ -265,14 +289,13 @@ class AddStuff extends React.Component {
                             title="Valider" onPress={this._hidePicker} />
                         </View>
                 */}
-                    { showpicker && <Picker selectedValue = {this.state.type} 
+                    { showpicker && 
+                    <Picker selectedValue = {this.state.type} 
                     onValueChange = {(text) => this.setState({type: text})}>
-                                <Picker.Item label = "Divers" value = "steve" />
-                                <Picker.Item label = "Steve" value = "steve" />
-                                <Picker.Item label = "Ellen" value = "ellen" />
-                                <Picker.Item label = "Maria" value = "maria" />
-                            </Picker>
+                        { typeItems }
+                        </Picker>
                     }
+                    {this._showMandatory(this.state.typeAlert)}
                 </View>
             </View>
         )
