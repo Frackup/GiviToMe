@@ -24,12 +24,17 @@ const TestStack = createStackNavigator()
 
 function HomeStackScreen() {
     return (
-        <HomeStack.Navigator>
+        <HomeStack.Navigator 
+            screenOptions={{
+            headerStyle: {
+                backgroundColor: '#003F5C',
+            },
+            headerTintColor: '#FB5B5A',
+            }}>
             <HomeStack.Screen name="Home"
             component={Home} 
             options={({route, navigation}) => (
-                {headerTitle: 'Home Page', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Home Page',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -37,8 +42,7 @@ function HomeStackScreen() {
             <HomeStack.Screen name="LendList" 
             component={LendList}
             options={({route, navigation}) => (
-                {headerTitle: 'Mes prêts', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Mes prêts',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -46,8 +50,7 @@ function HomeStackScreen() {
             <HomeStack.Screen name="AddMoney"
             component={AddMoney} 
             options={({route, navigation}) => (
-                {headerTitle: 'Prêt d\'argent', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Prêt d\'argent',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -56,7 +59,6 @@ function HomeStackScreen() {
             component={AddStuff} 
             options={({route, navigation}) => (
                 {headerTitle: 'Prêt d\'objet',
-                headerTintColor: '#707070', 
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -64,8 +66,7 @@ function HomeStackScreen() {
             <HomeStack.Screen name="Settings"
             component={Settings} 
             options={({route, navigation}) => (
-                {headerTitle: 'Settings', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Settings',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -73,8 +74,7 @@ function HomeStackScreen() {
             <HomeStack.Screen name="ItemDetails"
             component={ItemDetails} 
             options={({route, navigation}) => (
-                {headerTitle: 'Détails', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Détails',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -85,13 +85,18 @@ function HomeStackScreen() {
 
 function MoneyStackScreen() {
     return(
-        <MoneyStack.Navigator>
+        <MoneyStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: '#003F5C',
+            },
+            headerTintColor: '#FB5B5A',
+            }}>
             <MoneyStack.Screen name="LendList" 
             component={LendList}
             initialParams={{ type: 'Money' }}
             options={({route, navigation}) => (
-                {headerTitle: 'Mes prêts', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Mes prêts',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -99,8 +104,7 @@ function MoneyStackScreen() {
             <MoneyStack.Screen name="AddMoney"
             component={AddMoney} 
             options={({route, navigation}) => (
-                {headerTitle: 'Prêt d\'argent', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Prêt d\'argent',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -108,8 +112,7 @@ function MoneyStackScreen() {
             <MoneyStack.Screen name="ItemDetails"
             component={ItemDetails} 
             options={({route, navigation}) => (
-                {headerTitle: 'Détails', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Détails',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -120,13 +123,18 @@ function MoneyStackScreen() {
 
 function StuffStackScreen() {
     return(
-        <StuffStack.Navigator>
+        <StuffStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: '#003F5C',
+            },
+            headerTintColor: '#FB5B5A',
+            }}>
             <StuffStack.Screen name="LendList" 
             component={LendList}
             initialParams={{ type: 'Stuff' }}
             options={({route, navigation}) => (
-                {headerTitle: 'Mes prêts', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Mes prêts',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -135,7 +143,6 @@ function StuffStackScreen() {
             component={AddStuff} 
             options={({route, navigation}) => (
                 {headerTitle: 'Prêt d\'objet',
-                headerTintColor: '#707070', 
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -143,8 +150,7 @@ function StuffStackScreen() {
             <StuffStack.Screen name="ItemDetails"
             component={ItemDetails} 
             options={({route, navigation}) => (
-                {headerTitle: 'Détails', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Détails',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -155,12 +161,17 @@ function StuffStackScreen() {
 
 function TestStackScreen() {
     return(
-        <TestStack.Navigator>
+        <TestStack.Navigator
+        screenOptions={{
+            headerStyle: {
+                backgroundColor: '#003F5C',
+            },
+            headerTintColor: '#FB5B5A',
+            }}>
             <TestStack.Screen name="Test"
             component={Test} 
             options={({route, navigation}) => (
-                {headerTitle: 'Test', 
-                headerTintColor: '#707070',
+                {headerTitle: 'Test',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -197,9 +208,10 @@ function App() {
                     },
                 })}
                 tabBarOptions={{
-                    activeTintColor: 'white',
-                    activeBackgroundColor: '#ED6D6D',
-                    inactiveTintColor: '#ED6D6D',
+                    activeTintColor: '#FB5B5A',
+                    activeBackgroundColor: 'white',
+                    inactiveTintColor: '#FB5B5A',
+                    inactiveBackgroundColor: '#003F5C'
                 }}
             >
                 <Tab.Screen name='Home' component={HomeStackScreen} />

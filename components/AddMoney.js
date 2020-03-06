@@ -1,7 +1,7 @@
 // components/AddMoney.js
 
 import React from 'react'
-import { StyleSheet, View, Text, Button, Alert, TouchableOpacity, Keyboard } from 'react-native'
+import { StyleSheet, View, Text, Button, Alert, TouchableOpacity, Keyboard, Image } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Moment from 'react-moment'
@@ -28,7 +28,24 @@ class AddMoney extends React.Component {
         };
     }
 
+    _updateNavigationParams() {
+        const navigation = this.props.navigation
+        const type = this.props.route.params?.type ?? 'defaultValue'
+
+        const saveIconName = "save.png"
+
+        if (Platform.OS === "ios" && type !== 'People'){
+            navigation.setOptions({
+                        headerRight: () => <TouchableOpacity style={styles.save_touchable_headerrightbutton}
+                                        onPress={() => this._saveData()}>
+                                        <Image source={require('../assets/icons/' + saveIconName)} style={styles.save_image} />
+                        </TouchableOpacity>
+                })
+            }
+    }
+
     componentDidMount() {
+        this._updateNavigationParams()
     }
 
     _setDate = (event, date) => {
@@ -79,22 +96,6 @@ class AddMoney extends React.Component {
             });
     }
 
-    // Fonction pour permettre au bouton affiché de gérer à la fois la validation de la date via DatePicker et aussi
-    // l'enregistrement des données du prêt.
-    _doubleAction(){
-        if(this.state.show){
-            this._hideDP()
-        } else {
-            if(this._checkDataFilling()){
-                this._addMoney()
-                this._resetData()
-                Alert.alert("Prêt d'argent ajouté")
-            } else {
-                Alert.alert("Tous les champs ne sont pas complétés")
-            }
-        }
-    }
-
     _checkDataFilling(){
         var dataComplete = true
 
@@ -122,10 +123,12 @@ class AddMoney extends React.Component {
 
     _processDataOnFocus(){
         const amount = this.state.amount
-        this.setState({
-            displayedAmount: amount
-        })
-        this._hideDP()
+        if (this.state.amount !== 0) {
+            this.setState({
+                displayedAmount: amount.toString()
+            })
+            this._hideDP()
+        }
     }
 
     _resetData() {
@@ -212,10 +215,6 @@ class AddMoney extends React.Component {
                             onChangeText={(text) => {this.setState({ people: text })}}/>
                             {this._showMandatory(this.state.peopleAlert)}
                     </View>
-                    <View style={styles.button_container}>
-                        <Button style={styles.validation_button}
-                        title={(show) ? "Valider" : "Enregistrer"} onPress={() => this._doubleAction()} />
-                    </View>
                 </View>
                 <View style={styles.dp_view}>
                     { show && <DateTimePicker value={date}
@@ -231,6 +230,14 @@ class AddMoney extends React.Component {
 }
 
 const styles=StyleSheet.create({
+    save_touchable_headerrightbutton: {
+        marginRight: 8
+    },
+    save_image: {
+        marginRight: 10,
+        width: 25,
+        height: 25,
+    },
     dp_view: {
         flex: 0.5,
         alignContent: "flex-end"

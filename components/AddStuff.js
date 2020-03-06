@@ -195,22 +195,14 @@ class AddStuff extends React.Component {
     }
 
     _dataProcessing(text){
-        if (text != null) {
+        if (text != 'quantity') {
             const quantity = this.state.quantity
-            this.setState({
-                displayedQty: quantity.toString()
-            })
+            if (quantity !== 0) {
+                this.setState({
+                    displayedQty: quantity.toString()
+                })
+            }
         }
-        this._hideDP()
-        this._hidePicker()
-        this._checkDataFilling()
-    }
-
-    _qtyProcessing(){
-        const quantity = this.state.quantity
-        this.setState({
-            displayedQty: quantity.toString()
-        })
         this._hideDP()
         this._hidePicker()
         this._checkDataFilling()
@@ -225,10 +217,9 @@ class AddStuff extends React.Component {
 
     render(){
         const { showdp, showpicker, date } = this.state
-        console.log(this.state.typeList)
 
         let typeItems = this.state.typeList.map( ( val ) => {
-            return <Picker.Item value={val.label} label={val.label} />
+            return <Picker.Item key={val.key} value={val.label} label={val.label} />
         })
 
         return(

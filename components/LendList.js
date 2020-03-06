@@ -1,10 +1,9 @@
 // components/Money.js
 
 import React from 'react'
-import { StyleSheet, View, Image, Platform, FlatList, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Image, Platform, FlatList, ActivityIndicator, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import MyItem from './MyItem'
-import firebase from '../config/Firebase'
 import { Ionicons } from '@expo/vector-icons'
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
@@ -19,9 +18,6 @@ class LendList extends React.Component {
 
     constructor(props) {
         super(props)
-        const type = this.props.route.params?.type ?? 'defaultValue'
-
-        this._addItem = this._addItem.bind(this)
 
         this.state = { 
             moneyList: [],
@@ -77,7 +73,7 @@ class LendList extends React.Component {
         this._getData()
     }
 
-    _addItem(){
+    _addItem = () => {
         const type = this.props.route.params?.type ?? 'defaultValue'
 
         if (type === 'Money'){
@@ -122,18 +118,23 @@ class LendList extends React.Component {
     }
 
     _deleteItem = (idItem, type) => {
-        (type === 'Money') ? MoneyAccess.deleteMoney(idItem) : StuffAccess.deleteStuff(idItem)
-        alert(type + ' deleted')
-
         if (type === 'Money') {
+            let myMoney = new MoneyData()
+
+            myMoney.deleteMoney(idItem)
             this.setState({
                 moneyList: this.state.moneyList.filter(item => item.key != idItem)
             })
         } else {
+            let myStuff = new StuffData()
+
+            myStuff.deleteStuff(idItem)
             this.setState({
                 stuffList: this.state.stuffList.filter(item => item.key != idItem)
             })
         }
+
+        alert(type + ' deleted')
         
     }
 
@@ -149,31 +150,50 @@ class LendList extends React.Component {
         }
 
         return(
-            <FlatList
-                style={styles.list}
-                data={this._displayDataList()}
-                keyExtractor={(item) => item.key.toString()}
-                renderItem={({item}) => <MyItem 
-                    myItem={item}
-                    itemType={type}
-                    displayDetailsForMyItem={this._displayDetailsForMyItem}
-                    deleteItem={this._deleteItem}/>}
-                onEndReachedThreshold={0.5}
-                onEndReached={() => {
-                }}
-            />
+            <View style={styles.main_container}>
+                <View style={styles.title_container}>
+                    <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
+                    <Text style={styles.header_text}>XXX €</Text>
+                </View>
+                <FlatList
+                    style={styles.list}
+                    data={this._displayDataList()}
+                    keyExtractor={(item) => item.key.toString()}
+                    renderItem={({item}) => <MyItem 
+                        myItem={item}
+                        itemType={type}
+                        displayDetailsForMyItem={this._displayDetailsForMyItem}
+                        deleteItem={this._deleteItem}/>}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={() => {
+                    }}
+                />
+            </View>
         )
     }
 }
 
 const styles=StyleSheet.create({
-    total_container: {
-        flex: 0.2
-    },
     main_container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#003F5C'
+    },
+    title_container: {
+        justifyContent: "center",
+        alignItems: 'center',
+        marginTop: 40,
+        marginBottom: 40
+    },
+    header_text: {
+        textAlign: 'center',
+        fontSize: 35,
+        color: '#FFFFFF',
+    },
+    cadre: {
+        position: 'absolute',
+        marginRight: 10,
     },
     add_touchable_headerrightbutton: {
         marginRight: 8
@@ -181,7 +201,7 @@ const styles=StyleSheet.create({
     add_image: {
         marginRight: 10,
         fontSize: 30,
-        color: '#2AA4A8'
+        color: 'white'
     },
     add_touchable_floatingactionbutton: {
         position: 'absolute',
@@ -195,7 +215,6 @@ const styles=StyleSheet.create({
         alignItems: 'center'
     },
     list: {
-        flex: 1
     },
     activity: {
         position: 'absolute',

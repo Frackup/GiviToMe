@@ -14,11 +14,17 @@ import Swipeable from 'react-native-gesture-handler/Swipeable'
 class MyItem extends React.Component{
 
     state= {
-        deleteItem: false
+        deleteItem: false,
     }
 
     render(){
-        const { myItem, displayDetailsForMyItem } = this.props
+        const { myItem, displayDetailsForMyItem, itemType } = this.props
+        let showType = false
+        let type = ""
+        if (itemType === "Stuff") {
+            showType = true
+            type = myItem.type
+        }
 
         let ptfPrefix
         (Platform.OS === 'android') ? ptfPrefix = 'md-' : ptfPrefix = 'ios-'
@@ -98,6 +104,15 @@ class MyItem extends React.Component{
                             <Ionicons name={pplIconName} style={styles.btm_left_elmnts} />
                             <Text style={styles.btm_left_elmnts}>{myItem.people}</Text>
                         </View>
+                        { showType &&
+                        <View style={styles.right_part_container}>
+                            <Image style={styles.date_bg} source={require('../assets/icons/list_bg_type.png')} />
+                            <View style={styles.date_container}>
+                                <Text style={styles.btm_right_elmnts}>{type}</Text>
+                                <Ionicons name={calIconName} style={styles.btm_right_elmnts} />
+                            </View>
+                        </View>
+                        }
                     </View>
                 </TouchableOpacity>
             </Swipeable>
@@ -109,8 +124,9 @@ const styles=StyleSheet.create({
     main_container: {
         height: 100,
         flex: 1,
-        marginTop: 2,
-        marginBottom: 2
+        marginTop: 5,
+        marginBottom: 5,
+        backgroundColor: '#465881'
     },
     top_left_elmnts: {
         marginLeft: 10,
@@ -129,14 +145,14 @@ const styles=StyleSheet.create({
     },
     btm_right_elmnts: {
         marginRight: 10,
-        marginBottom: 5,
         fontSize: 15,
         color: '#FFFFFF'
     },
     first_line: {
         flexDirection: 'row',
         width: '100%',
-        flex: 2
+        flex: 2,
+        marginTop: 5
     },
     date_bg: {
         position: 'absolute'
@@ -166,12 +182,13 @@ const styles=StyleSheet.create({
     main_text: {
         fontSize: 25,
         margin: 10,
-        color: '#ED6D6D'
+        color: '#FB5B5A'
     },
     last_row: {
         flexDirection: 'row',
         flex: 2,
-        width: '100%'
+        width: '100%',
+        marginBottom: 5
     }
 })
 

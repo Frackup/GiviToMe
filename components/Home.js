@@ -72,13 +72,10 @@ class Home extends React.Component {
         const { navigation } = this.props
 
         this.focusListener = navigation.addListener('focus', () => {
-            console.log('coucou')
             this._getData()
         });
         
         this._updateNavigationParams()
-        //this._getData()
-        // Faire en sorte que les fonctions ici se jouent à chaque fois que l'on arrive sur l'écran (gestion du back navigation pour la mise à jour des totaux de prêts)
     }
 
     componentWillUnmount() {
@@ -105,6 +102,7 @@ class Home extends React.Component {
         return(
             <View style={styles.main_container}>
                 <View style={styles.header_view}>
+                    <Image source={require('../assets/icons/cadre_full.png')} style={styles.cadre} />
                     <Text style={styles.header_text}>GiViToMe</Text>
                 </View>
 
@@ -115,7 +113,7 @@ class Home extends React.Component {
                             <Text style={styles.lend_title}>Argent</Text>
                         </View>
                         <View style={styles.lend_content}>
-                            <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
+                            <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
                             {/* TODO: Gérer la localization pour afficher soit € soit $ */}
                             <Text style={styles.lend_text}>{this.state.totalMoney} €</Text>
                             <TouchableOpacity style={styles.add_button} onPress={() => {this._addMoney()}}>
@@ -128,7 +126,7 @@ class Home extends React.Component {
                             <Text style={styles.lend_title}>Objets</Text>
                         </View>
                         <View style={styles.lend_content}>
-                            <Image source={require('../assets/icons/cadre-home.png')} style={styles.home_img} />
+                            <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
                             <Text style={styles.lend_text}>{this.state.totalQuantity}</Text>
                             <TouchableOpacity style={styles.add_button} onPress={() => {this._addStuff()}}>
                                 <Ionicons name={iconName} style={styles.icon_style} />
@@ -147,18 +145,20 @@ class Home extends React.Component {
 
 const styles = StyleSheet.create({
     main_container: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#003F5C'
     },
     header_view: {
         flex: 1,
-        justifyContent: 'space-evenly',
-        marginTop: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 30,
         marginBottom: 20
     },
     header_text: {
         textAlign: 'center',
         fontSize: 35,
-        color: '#2AA4A8'
+        color: '#FFFFFF',
     },
     lend_view: {
         flex: 3,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     lend_title: {
         fontSize: 25,
         marginLeft: 10,
-        color: '#707070'
+        color: '#FFFFFF'
     },
     lend_text: {
         fontSize: 25,
@@ -193,13 +193,13 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10
     },
-    home_img: {
+    cadre: {
         position: 'absolute',
         marginRight: 10,
     },
     icon_style: {
         fontSize: 60,
-        color: '#2AA4A8'
+        color: '#FFFFFF'
     },
     footer_view: {
         flex: 1,
@@ -208,12 +208,13 @@ const styles = StyleSheet.create({
     text_footer_view: {
         textAlign: 'center',
         fontSize: 14,
-        margin: 10
+        margin: 10,
+        color: 'white'
     },
     settings_image: {
         fontSize: 30,
         marginRight: 10,
-        color: '#2AA4A8'
+        color: 'white'
     }
 })
 
