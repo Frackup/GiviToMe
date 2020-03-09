@@ -36,6 +36,26 @@ export default class TypeData {
         return typeList
     }
 
+    async totalTypes() {
+        let totalTypes = 0
+
+        let query = await this.type.get()
+        .then(snapshot => {
+            if (snapshot.empty) {
+            console.log('No type data.')
+            return [];
+            }  
+
+            snapshot.forEach(type => {
+                totalTypes ++
+            })
+        })
+        .catch(err => {
+            console.log('Error getting type data : ', err);
+        })
+        return totalTypes
+    }
+
     addType(label) {
         // Ajout du prêt d'objet en BDD
         this.type.add({

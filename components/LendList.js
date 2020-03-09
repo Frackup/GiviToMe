@@ -138,13 +138,39 @@ class LendList extends React.Component {
         
     }
 
+    _getTotal() {
+        let total = 0
+        const type = this.props.route.params?.type ?? 'defaultValue'
+
+        if (type === 'Stuff') {
+            let myStuff = new StuffData();
+            myStuff.totalStuff().then(val => { this.setState({
+                totalQuantity: val
+                })
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        } else {
+            let myMoney = new MoneyData();
+            myMoney.totalMoney().then(val => { this.setState({
+                totalMoney: val
+                })
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        }
+    }
+
     render(){
         const type = this.props.route.params?.type ?? 'defaultValue'
+        const total = this._getTotal()
 
         if(this.state.isLoading){
             return(
               <View style={styles.activity}>
-                <ActivityIndicator size="large" color="#ED6D6D"/>
+                <ActivityIndicator size="large" color="#FB5B5A"/>
               </View>
             )
         }
@@ -153,7 +179,9 @@ class LendList extends React.Component {
             <View style={styles.main_container}>
                 <View style={styles.title_container}>
                     <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
-                    <Text style={styles.header_text}>XXX €</Text>
+                    <Text style={styles.header_text}>
+                        {(type === 'Money') ? this.state.totalMoney + ' €' : this.state.totalQuantity}
+                    </Text>
                 </View>
                 <FlatList
                     style={styles.list}
@@ -181,7 +209,7 @@ const styles=StyleSheet.create({
         backgroundColor: '#003F5C'
     },
     title_container: {
-        justifyContent: "center",
+        justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
         marginBottom: 40
@@ -189,7 +217,7 @@ const styles=StyleSheet.create({
     header_text: {
         textAlign: 'center',
         fontSize: 35,
-        color: '#FFFFFF',
+        color: 'white',
     },
     cadre: {
         position: 'absolute',
@@ -223,7 +251,8 @@ const styles=StyleSheet.create({
         top: 0,
         bottom: 0,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: '#003F5C'
       }
 })
 

@@ -131,28 +131,28 @@ const styles=StyleSheet.create({
     top_left_elmnts: {
         marginLeft: 10,
         fontSize: 15,
-        color: '#FFFFFF'
+        color: 'white'
     },
     top_right_elmnts: {
         marginRight: 10,
         fontSize: 15,
-        color: '#2AA4A8'
+        color: 'white'
     },
     btm_left_elmnts:{
         marginLeft: 10,
         fontSize: 15,
-        color: '#2AA4A8'
+        color: 'white'
     },
     btm_right_elmnts: {
         marginRight: 10,
         fontSize: 15,
-        color: '#FFFFFF'
+        color: 'white'
     },
     first_line: {
         flexDirection: 'row',
         width: '100%',
         flex: 2,
-        marginTop: 5
+        marginTop: 4
     },
     date_bg: {
         position: 'absolute'
@@ -188,7 +188,7 @@ const styles=StyleSheet.create({
         flexDirection: 'row',
         flex: 2,
         width: '100%',
-        marginBottom: 5
+        marginBottom: 4
     }
 })
 

@@ -32,7 +32,7 @@ class AddMoney extends React.Component {
         const navigation = this.props.navigation
         const type = this.props.route.params?.type ?? 'defaultValue'
 
-        const saveIconName = "save.png"
+        const saveIconName = "ic_save.png"
 
         if (Platform.OS === "ios" && type !== 'People'){
             navigation.setOptions({
@@ -191,8 +191,8 @@ class AddMoney extends React.Component {
                             {this._showMandatory(this.state.titleAlert)}
 
                         <Text style={styles.text_view}>Date du prêt</Text>
-                        <TouchableOpacity onPress={this._datepicker}>
-                            <Moment style={styles.data_input} element={Text} format="DD/MM/YYYY" date={date}/>
+                        <TouchableOpacity onPress={this._datepicker} style={styles.data_input}>
+                            <Moment style={styles.alt_input} element={Text} format="DD/MM/YYYY" date={date}/>
                         </TouchableOpacity>
                         
                         <Text style={styles.text_view}>Montant à prêter</Text>
@@ -246,7 +246,8 @@ const styles=StyleSheet.create({
         flex: 1
     },
     main_view: {
-        flex: 1
+        flex: 1,
+        backgroundColor: '#003F5C'
     },
     title_container: {
         flex: 0.75,
@@ -258,13 +259,14 @@ const styles=StyleSheet.create({
     },
     title_text_view: {
         fontSize: 20,
+        color: '#FB5B5A'
     },
     text_view: {
         fontSize: 15,
         marginTop: 10,
         marginBottom: 6,
         marginLeft: 10,
-        color: '#707070',
+        color: 'white',
         alignSelf: 'center'
     },
     data_input: {
@@ -274,7 +276,12 @@ const styles=StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         padding: 3,
-        borderColor: '#2AA4A8'
+        borderColor: '#003F5C',
+        backgroundColor: '#465881',
+        color: 'white'
+    },
+    alt_input: {
+        color: 'white'
     },
     button_container: {
         flex: 1

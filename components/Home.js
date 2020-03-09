@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     header_text: {
         textAlign: 'center',
         fontSize: 35,
-        color: '#FFFFFF',
+        color: 'white',
     },
     lend_view: {
         flex: 3,
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     lend_title: {
         fontSize: 25,
         marginLeft: 10,
-        color: '#FFFFFF'
+        color: 'white'
     },
     lend_text: {
         fontSize: 25,
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     },
     icon_style: {
         fontSize: 60,
-        color: '#FFFFFF'
+        color: 'white'
     },
     footer_view: {
         flex: 1,
