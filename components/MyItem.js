@@ -71,46 +71,49 @@ class MyItem extends React.Component{
         }
 
         return(
-            <TouchableOpacity 
+            <TouchableHighlight 
                 style={styles.main_container}
-                onPress={() => displayDetailsForMyItem(myItem.key)}>
+                //onPress={() => displayDetailsForMyItem(myItem.key)}
+                >
+                <>
 
-                <View style={styles.first_line}>
-                    <View style={styles.left_part_container}>
-                        <Image style={styles.date_bg} source={require('../assets/icons/list_bg.png')} />
-                        <View style={styles.date_container}>
-                            <Ionicons name={calIconName} style={styles.top_left_elmnts} />
-                            <Moment style={styles.top_left_elmnts} element={Text} format="DD/MM/YYYY" date={myItem.date} />
+                    <View style={styles.first_line}>
+                        <View style={styles.left_part_container}>
+                            <Image style={styles.date_bg} source={require('../assets/icons/list_bg.png')} />
+                            <View style={styles.date_container}>
+                                <Ionicons name={calIconName} style={styles.top_left_elmnts} />
+                                <Moment style={styles.top_left_elmnts} element={Text} format="DD/MM/YYYY" date={myItem.date} />
+                            </View>
+                        </View>
+                        <View style={styles.right_part_container}>
+                            <Text style={styles.top_right_elmnts}>{myItem.title}</Text>
+                            <Ionicons name={titleIconName} style={styles.top_right_elmnts} />
                         </View>
                     </View>
-                    <View style={styles.right_part_container}>
-                        <Text style={styles.top_right_elmnts}>{myItem.title}</Text>
-                        <Ionicons name={titleIconName} style={styles.top_right_elmnts} />
-                    </View>
-                </View>
 
-                <View style={styles.main_data}>
-                    <Text style={styles.main_text}>
-                        {(this.props.itemType === 'Money') ? myItem.amount + " €" : myItem.quantity + " Objets"}
-                    </Text>
-                </View>
-
-                <View style={styles.last_row}>
-                    <View style={styles.left_part_container}>
-                        <Ionicons name={pplIconName} style={styles.btm_left_elmnts} />
-                        <Text style={styles.btm_left_elmnts}>{myItem.people}</Text>
+                    <View style={styles.main_data}>
+                        <Text style={styles.main_text}>
+                            {(this.props.itemType === 'Money') ? myItem.amount + " €" : myItem.quantity + " Objets"}
+                        </Text>
                     </View>
-                    { showType &&
-                    <View style={styles.right_part_container}>
-                        <Image style={styles.date_bg} source={require('../assets/icons/list_bg_type.png')} />
-                        <View style={styles.date_container}>
-                            <Text style={styles.btm_right_elmnts}>{type}</Text>
-                            <Ionicons name={calIconName} style={styles.btm_right_elmnts} />
+
+                    <View style={styles.last_row}>
+                        <View style={styles.left_part_container}>
+                            <Ionicons name={pplIconName} style={styles.btm_left_elmnts} />
+                            <Text style={styles.btm_left_elmnts}>{myItem.people}</Text>
                         </View>
+                        { showType &&
+                        <View style={styles.right_part_container}>
+                            <Image style={styles.date_bg} source={require('../assets/icons/list_bg_type.png')} />
+                            <View style={styles.date_container}>
+                                <Text style={styles.btm_right_elmnts}>{type}</Text>
+                                <Ionicons name={calIconName} style={styles.btm_right_elmnts} />
+                            </View>
+                        </View>
+                        }
                     </View>
-                    }
-                </View>
-            </TouchableOpacity>
+                </>
+            </TouchableHighlight>
         )
     }
 }

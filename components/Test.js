@@ -1,8 +1,8 @@
 // components/Test.js
 
 import React from 'react'
-import { StyleSheet, View, Image, Platform, Animated, ActivityIndicator, Text } from 'react-native'
-import { TouchableOpacity, TouchableHighlight } from 'react-native-gesture-handler'
+import { StyleSheet, View, Image, Platform, ActivityIndicator, Text } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Ionicons } from '@expo/vector-icons'
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
@@ -13,8 +13,6 @@ import SwipeValueBasedUi from '../functions/SwipeValueBasedUI'
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 /*TODO:
-- permettre de parcourir la liste des prêts d'argent ou d'objet réalisés et de l'ordonner selon certains critères 
-- (par montant, date, type, ...)
 - PErmettre d'éditer un prêt
 */
 
@@ -30,7 +28,7 @@ class Test extends React.Component {
     }
 
     _initData() {
-        const type = this.props.route.params?.type ?? 'defaultValue'
+        const type = this.props.route.params?.type ?? 'Money'
         let myObject
 
         if (type === 'Money'){
@@ -136,31 +134,19 @@ class Test extends React.Component {
         console.log('This row opened', rowKey);
     }
 
-    _renderItem = data => {
-        return(
-            <TouchableHighlight
-                //onPress={() => console.log('You touched me')}
-                style={styles.rowFront}
-                underlayColor={'#AAAJJJ'}
-            >
-                <View>
-                    <Text>I am {data.item.title} in a SwipeListView</Text>
-                </View>
-            </TouchableHighlight>
-        )
-    }
-
     _renderHiddenItem = (data, rowMap) => {
         return (
             <View style={styles.rowBack}>
-                <Text style={styles.toto}>Left</Text>
+                <Text>Left</Text>
                 <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                    onPress={() => this._closeRow(rowMap, data.item.index)} >
+                    //onPress={() => this._closeRow(rowMap, data.item.index)} 
+                    >
                     <Text style={styles.backTextWhite}>Close</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.backRightBtn, styles.backRightBtnRight]}
-                    onPress={() => this._deleteRow(rowMap, data.item.index)} >
+                    //onPress={() => this._deleteRow(rowMap, data.item.index)} 
+                    >
                     <Text style={styles.backTextWhite}>Delete</Text>
                 </TouchableOpacity>
             </View>
@@ -176,50 +162,35 @@ class Test extends React.Component {
                 <ActivityIndicator size="large" color="#FB5B5A"/>
               </View>
             )
-        }
-
-        return(
-            <View style={styles.main_container}>
-                <View style={styles.title_container}>
-                    <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
-                    <Text style={styles.header_text}>
-                        {(type === 'Money') ? this.state.total + ' €' : this.state.total}
-                    </Text>
-                </View>
+        } else {
+            return(
                 <View style={styles.main_container}>
-                    <SwipeListView
-                        data={this.state.dataList}
-                        renderItem={({item}) => <MyItem 
-                            myItem={item}
-                            itemType={type}
-                            displayDetailsForMyItem={this._displayDetailsForMyItem}
-                            deleteItem={this._deleteItem}/>}
-                        renderHiddenItem={this._renderHiddenItem}
-                        leftOpenValue={75}
-                        rightOpenValue={-150}
-                        previewRowKey={'0'}
-                        previewOpenValue={-40}
-                        previewOpenDelay={3000}
-                        onRowDidOpen={this._onRowDidOpen}
-                    />
+                    <View style={styles.title_container}>
+                        <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
+                        <Text style={styles.header_text}>
+                            {(type === 'Money') ? this.state.total + ' €' : this.state.total}
+                        </Text>
+                    </View>
+                    <View style={styles.main_container}>
+                        <SwipeListView
+                            data={this.state.dataList}
+                            renderItem={({item}) => <MyItem 
+                                myItem={item}
+                                itemType={type}
+                                displayDetailsForMyItem={this._displayDetailsForMyItem}
+                                deleteItem={this._deleteItem}/>}
+                            renderHiddenItem={this._renderHiddenItem}
+                            leftOpenValue={75}
+                            rightOpenValue={-150}
+                            previewRowKey={'0'}
+                            previewOpenValue={-40}
+                            previewOpenDelay={3000}
+                            onRowDidOpen={this._onRowDidOpen}
+                        />
+                    </View>
                 </View>
-                {/*
-                <FlatList
-                    style={styles.list}
-                    data={this._displayDataList()}
-                    keyExtractor={(item) => item.key.toString()}
-                    renderItem={({item}) => <MyItem 
-                        myItem={item}
-                        itemType={type}
-                        displayDetailsForMyItem={this._displayDetailsForMyItem}
-                        deleteItem={this._deleteItem}/>}
-                    onEndReachedThreshold={0.5}
-                    onEndReached={() => {
-                    }}
-                />
-                */}
-            </View>
-        )
+            )
+        }
     }
 }
 
@@ -265,8 +236,6 @@ const styles=StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    list: {
-    },
     activity: {
         position: 'absolute',
         left: 0,
@@ -294,7 +263,7 @@ const styles=StyleSheet.create({
     },
     rowBack: {
         alignItems: 'center',
-        backgroundColor: '#003F5C',
+        backgroundColor: '#DDD',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -309,9 +278,8 @@ const styles=StyleSheet.create({
         width: 75,
     },
     backRightBtnLeft: {
-        alignSelf: 'flex-end',
         backgroundColor: 'blue',
-        //right: 55,
+        right: 75,
     },
     backRightBtnRight: {
         backgroundColor: 'red',
