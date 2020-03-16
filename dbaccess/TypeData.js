@@ -10,7 +10,7 @@ export default class TypeData {
 
     // async function puisque react fonctionne de la sorte. Il ne peut donc transmettre de façon dynamique des données
     // entre les classes (sinon il pourrait attendre indéfiniment). Il faut ensuite récupérer la promise de l'autre côté.
-    async getTypeData() {
+    async getData() {
         const typeList = []
 
         let query = await this.type.get()
@@ -36,7 +36,7 @@ export default class TypeData {
         return typeList
     }
 
-    async totalTypes() {
+    async total() {
         let totalTypes = 0
 
         let query = await this.type.get()
@@ -56,7 +56,7 @@ export default class TypeData {
         return totalTypes
     }
 
-    addType(label) {
+    add(label) {
         // Ajout du prêt d'objet en BDD
         this.type.add({
             label: label
@@ -68,7 +68,7 @@ export default class TypeData {
         });
     }
 
-    deleteType(key) {
+    delete(key) {
         this.type.doc(key).delete()
         .catch((error) => {
             console.error("Error deleting type : ", error);

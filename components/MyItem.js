@@ -1,15 +1,10 @@
 // components/MyItem.js
 
 import React from 'react'
-import { StyleSheet, TouchableOpacity, Image, View, Text, Platform, Animated } from 'react-native'
+import { StyleSheet, TouchableOpacity, TouchableHighlight, Image, View, Text, Platform, Animated } from 'react-native'
 import Moment from 'react-moment'
 import { Ionicons } from '@expo/vector-icons'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
-
-/* TODO:
-- Construire le template de la cellule de mes listes
-- Penser que la structure doit s'adapter à l'item affiché (Money, Stuff ou People)
-*/
 
 class MyItem extends React.Component{
 
@@ -41,23 +36,25 @@ class MyItem extends React.Component{
 
             return (
                 <>
-                    <TouchableOpacity onPress={() => this.props.deleteItem(myItem.key, this.props.itemType)}>
+                    <TouchableOpacity onPress={() => this.props.deleteItem(myItem.key, this.props.itemType)}
+                    style= {{}}>
                         <View
-                            style={{ flex: 1, backgroundColor: 'red', justifyContent: 'center' }}>
+                            style={{ flex:1, backgroundColor: 'red', justifyContent: 'center', marginTop: 5, marginBottom: 5}}>
                             <Animated.Text
                             style={{
                                 color: 'white',
                                 paddingHorizontal: 25,
+                                marginTop: 5,
                                 fontWeight: '600',
                                 transform: [{ scale }]
                             }}>
-                            <Ionicons name={trashIconName} size={40} color='#FFFFFF' />
+                            <Ionicons name={trashIconName} size={40} color='white' />
                             </Animated.Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.deleteItem(myItem.key, 'toto')}>
                         <View
-                            style={{ flex: 1, backgroundColor: 'orange', justifyContent: 'center' }}>
+                            style={{ flex: 1, backgroundColor: 'orange', justifyContent: 'center', marginTop: 5, marginBottom: 5 }}>
                             <Animated.Text
                             style={{
                                 color: 'white',
@@ -65,7 +62,7 @@ class MyItem extends React.Component{
                                 fontWeight: '600',
                                 transform: [{ scale }]
                             }}>
-                            <Ionicons name='md-create' size={40} color='#FFFFFF' />
+                            <Ionicons name='md-create' size={40} color='white' />
                             </Animated.Text>
                         </View>
                     </TouchableOpacity>
@@ -74,48 +71,46 @@ class MyItem extends React.Component{
         }
 
         return(
-            <Swipeable renderRightActions={RightActions}>
-                <TouchableOpacity 
-                    style={styles.main_container}
-                    onPress={() => displayDetailsForMyItem(myItem.key)}>
+            <TouchableOpacity 
+                style={styles.main_container}
+                onPress={() => displayDetailsForMyItem(myItem.key)}>
 
-                    <View style={styles.first_line}>
-                        <View style={styles.left_part_container}>
-                            <Image style={styles.date_bg} source={require('../assets/icons/list_bg.png')} />
-                            <View style={styles.date_container}>
-                                <Ionicons name={calIconName} style={styles.top_left_elmnts} />
-                                <Moment style={styles.top_left_elmnts} element={Text} format="DD/MM/YYYY" date={myItem.date} />
-                            </View>
-                        </View>
-                        <View style={styles.right_part_container}>
-                            <Text style={styles.top_right_elmnts}>{myItem.title}</Text>
-                            <Ionicons name={titleIconName} style={styles.top_right_elmnts} />
+                <View style={styles.first_line}>
+                    <View style={styles.left_part_container}>
+                        <Image style={styles.date_bg} source={require('../assets/icons/list_bg.png')} />
+                        <View style={styles.date_container}>
+                            <Ionicons name={calIconName} style={styles.top_left_elmnts} />
+                            <Moment style={styles.top_left_elmnts} element={Text} format="DD/MM/YYYY" date={myItem.date} />
                         </View>
                     </View>
-
-                    <View style={styles.main_data}>
-                        <Text style={styles.main_text}>
-                            {(this.props.itemType === 'Money') ? myItem.amount + " €" : myItem.quantity + " Objets"}
-                        </Text>
+                    <View style={styles.right_part_container}>
+                        <Text style={styles.top_right_elmnts}>{myItem.title}</Text>
+                        <Ionicons name={titleIconName} style={styles.top_right_elmnts} />
                     </View>
+                </View>
 
-                    <View style={styles.last_row}>
-                        <View style={styles.left_part_container}>
-                            <Ionicons name={pplIconName} style={styles.btm_left_elmnts} />
-                            <Text style={styles.btm_left_elmnts}>{myItem.people}</Text>
-                        </View>
-                        { showType &&
-                        <View style={styles.right_part_container}>
-                            <Image style={styles.date_bg} source={require('../assets/icons/list_bg_type.png')} />
-                            <View style={styles.date_container}>
-                                <Text style={styles.btm_right_elmnts}>{type}</Text>
-                                <Ionicons name={calIconName} style={styles.btm_right_elmnts} />
-                            </View>
-                        </View>
-                        }
+                <View style={styles.main_data}>
+                    <Text style={styles.main_text}>
+                        {(this.props.itemType === 'Money') ? myItem.amount + " €" : myItem.quantity + " Objets"}
+                    </Text>
+                </View>
+
+                <View style={styles.last_row}>
+                    <View style={styles.left_part_container}>
+                        <Ionicons name={pplIconName} style={styles.btm_left_elmnts} />
+                        <Text style={styles.btm_left_elmnts}>{myItem.people}</Text>
                     </View>
-                </TouchableOpacity>
-            </Swipeable>
+                    { showType &&
+                    <View style={styles.right_part_container}>
+                        <Image style={styles.date_bg} source={require('../assets/icons/list_bg_type.png')} />
+                        <View style={styles.date_container}>
+                            <Text style={styles.btm_right_elmnts}>{type}</Text>
+                            <Ionicons name={calIconName} style={styles.btm_right_elmnts} />
+                        </View>
+                    </View>
+                    }
+                </View>
+            </TouchableOpacity>
         )
     }
 }

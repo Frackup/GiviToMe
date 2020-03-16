@@ -8,7 +8,7 @@ export default class MoneyData {
         this.money = firebase.firestore().collection('money');
     }
 
-    async getMoneyData(){
+    async getData(){
         const moneyList = [];
 
         let query = await this.money.get()
@@ -37,7 +37,7 @@ export default class MoneyData {
         return moneyList
     }
 
-    async totalMoney() {
+    async total() {
         let totalMoney = 0
 
         let query = await this.money.get()
@@ -57,7 +57,7 @@ export default class MoneyData {
         return totalMoney
     }
 
-    addMoney(title, amount, date, people) {
+    add(title, amount, date, people) {
         // Ajout du prêt d'argent en BDD
         this.money.add({
             title: title,
@@ -72,7 +72,7 @@ export default class MoneyData {
         });
     }
 
-    deleteMoney(key) {
+    delete(key) {
         this.money.doc(key).delete()
         .catch((error) => {
             console.error("Error deleting money : ", error);

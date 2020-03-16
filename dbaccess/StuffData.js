@@ -11,7 +11,7 @@ export default class StuffData {
 
     // async function puisque react fonctionne de la sorte. Il ne peut donc transmettre de façon dynamique des données
     // entre les classes (sinon il pourrait attendre indéfiniment). Il faut ensuite récupérer la promise de l'autre côté.
-    async getStuffData() {
+    async getData() {
         const stuffList = []
 
         let query = await this.stuff.get()
@@ -41,7 +41,7 @@ export default class StuffData {
         return stuffList
     }
 
-    async totalStuff() {
+    async total() {
         let totalQuantity = 0
 
         let query = await this.stuff.get()
@@ -61,7 +61,7 @@ export default class StuffData {
         return totalQuantity
     }
 
-    addStuff(title, quantity, date, people, type) {
+    add(title, quantity, date, people, type) {
         // Ajout du prêt d'objet en BDD
         this.stuff.add({
             title: title,
@@ -77,7 +77,7 @@ export default class StuffData {
         });
     }
 
-    deleteStuff(key) {
+    delete(key) {
         this.stuff.doc(key).delete()
         .catch((error) => {
             console.error("Error deleting stuff : ", error);

@@ -71,14 +71,6 @@ function HomeStackScreen() {
                 navigation: {navigation}}
             )}
             />
-            <HomeStack.Screen name="ItemDetails"
-            component={ItemDetails} 
-            options={({route, navigation}) => (
-                {headerTitle: 'Détails',
-                route: {route}, 
-                navigation: {navigation}}
-            )}
-            />
         </HomeStack.Navigator>
     )
 }
@@ -172,6 +164,14 @@ function TestStackScreen() {
             component={Test} 
             options={({route, navigation}) => (
                 {headerTitle: 'Test',
+                route: {route}, 
+                navigation: {navigation}}
+            )}
+            />
+            <TestStack.Screen name="ItemDetails"
+            component={ItemDetails} 
+            options={({route, navigation}) => (
+                {headerTitle: 'Détails',
                 route: {route}, 
                 navigation: {navigation}}
             )}

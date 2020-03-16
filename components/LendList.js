@@ -7,6 +7,7 @@ import MyItem from './MyItem'
 import { Ionicons } from '@expo/vector-icons'
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
+import SwipeValueBasedUi from '../functions/SwipeValueBasedUI'
 
 /*TODO:
 - permettre de parcourir la liste des prêts d'argent ou d'objet réalisés et de l'ordonner selon certains critères 
@@ -20,34 +21,37 @@ class LendList extends React.Component {
         super(props)
 
         this.state = { 
-            moneyList: [],
-            stuffList: [],
-            peopleList: [],
+            dataList: [],
             isLoading: true
         }
     }
 
-    _getData() {
+    _initData() {
         const type = this.props.route.params?.type ?? 'defaultValue'
+        let myObject
 
         if (type === 'Money'){
-            let myMoney = new MoneyData()
-            myMoney.getMoneyData().then(val => {
-                this.setState({
-                    moneyList: val,
-                    isLoading: false,
-                })
-            })
-            
-        } else if (type === 'Stuff'){
-            let myStuff = new StuffData()
-            myStuff.getStuffData().then(val => {
-                this.setState({
-                    stuffList: val,
-                    isLoading: false,
-                })
-            })
+            myObject = new MoneyData()
+        } else {
+            myObject = new StuffData()
         }
+
+        this.setState({
+            mydataObject: myObject
+        })
+
+        myObject.getData().then(val => {
+            this.setState({
+                dataList: val,
+                isLoading: false,
+            })
+        })
+
+        myObject.total().then(val => {
+            this.setState({
+                total: val
+            })
+        })
     }
 
     _updateNavigationParams() {
@@ -70,7 +74,7 @@ class LendList extends React.Component {
 
     componentDidMount(){
         this._updateNavigationParams()
-        this._getData()
+        this._initData()
     }
 
     _addItem = () => {
@@ -105,67 +109,17 @@ class LendList extends React.Component {
         this.props.navigation.navigate('ItemDetails', { idMyItem: idItem, type: type })
     }
 
-    _displayDataList(){
-        const type = this.props.route.params?.type ?? 'defaultValue'
-
-        if (type === 'Money') {
-            return this.state.moneyList
-        } else if (type === 'Stuff') {
-            return this.state.stuffList
-        } else {
-            return this.state.peopleList
-        }
-    }
-
     _deleteItem = (idItem, type) => {
-        if (type === 'Money') {
-            let myMoney = new MoneyData()
-
-            myMoney.deleteMoney(idItem)
-            this.setState({
-                moneyList: this.state.moneyList.filter(item => item.key != idItem)
-            })
-        } else {
-            let myStuff = new StuffData()
-
-            myStuff.deleteStuff(idItem)
-            this.setState({
-                stuffList: this.state.stuffList.filter(item => item.key != idItem)
-            })
-        }
+        this.state.mydataObject.delete(idItem)
+        this.setState({
+            dataList: this.state.moneyList.filter(item => item.key != idItem)
+        })
 
         alert(type + ' deleted')
-        
-    }
-
-    _getTotal() {
-        let total = 0
-        const type = this.props.route.params?.type ?? 'defaultValue'
-
-        if (type === 'Stuff') {
-            let myStuff = new StuffData();
-            myStuff.totalStuff().then(val => { this.setState({
-                totalQuantity: val
-                })
-            })
-            .catch(error => {
-                console.error(error)
-            })
-        } else {
-            let myMoney = new MoneyData();
-            myMoney.totalMoney().then(val => { this.setState({
-                totalMoney: val
-                })
-            })
-            .catch(error => {
-                console.error(error)
-            })
-        }
     }
 
     render(){
         const type = this.props.route.params?.type ?? 'defaultValue'
-        const total = this._getTotal()
 
         if(this.state.isLoading){
             return(
@@ -180,12 +134,12 @@ class LendList extends React.Component {
                 <View style={styles.title_container}>
                     <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
                     <Text style={styles.header_text}>
-                        {(type === 'Money') ? this.state.totalMoney + ' €' : this.state.totalQuantity}
+                        {(type === 'Money') ? this.state.total + ' €' : this.state.total}
                     </Text>
                 </View>
                 <FlatList
                     style={styles.list}
-                    data={this._displayDataList()}
+                    data={this.state.dataList}
                     keyExtractor={(item) => item.key.toString()}
                     renderItem={({item}) => <MyItem 
                         myItem={item}
@@ -204,8 +158,6 @@ class LendList extends React.Component {
 const styles=StyleSheet.create({
     main_container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#003F5C'
     },
     title_container: {

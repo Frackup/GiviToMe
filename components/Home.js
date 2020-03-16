@@ -50,7 +50,7 @@ class Home extends React.Component {
 
     _getData() {
         let myStuff = new StuffData();
-        myStuff.totalStuff().then(val => { this.setState({
+        myStuff.total().then(val => { this.setState({
             totalQuantity: val
             })
         })
@@ -59,7 +59,7 @@ class Home extends React.Component {
         })
 
         let myMoney = new MoneyData();
-        myMoney.totalMoney().then(val => { this.setState({
+        myMoney.total().then(val => { this.setState({
             totalMoney: val
             })
         })
@@ -174,13 +174,13 @@ const styles = StyleSheet.create({
     lend_title: {
         fontSize: 25,
         marginLeft: 10,
-        color: 'white'
+        color: 'white',
     },
     lend_text: {
         fontSize: 25,
         marginLeft: 10,
         position: 'absolute',
-        color: 'white'
+        color: 'white',
     },
     add_button: {
         alignSelf: 'flex-end',
