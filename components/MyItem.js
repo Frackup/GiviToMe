@@ -1,7 +1,7 @@
 // components/MyItem.js
 
 import React from 'react'
-import { StyleSheet, TouchableOpacity, TouchableHighlight, Image, View, Text, Platform, Animated } from 'react-native'
+import { StyleSheet, Image, View, Text, Platform, Animated, TouchableOpacity, TouchableHighlight } from 'react-native'
 import Moment from 'react-moment'
 import { Ionicons } from '@expo/vector-icons'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
@@ -26,57 +26,13 @@ class MyItem extends React.Component{
         const calIconName = ptfPrefix + 'calendar'
         const titleIconName = ptfPrefix + 'create'
         const pplIconName = ptfPrefix + 'contact'
-        const trashIconName = ptfPrefix + 'trash'
-
-        const RightActions = (progress, dragX) => {
-            const scale = dragX.interpolate({
-              inputRange: [-100, 0],
-              outputRange: [0.7, 0]
-            })
-
-            return (
-                <>
-                    <TouchableOpacity onPress={() => this.props.deleteItem(myItem.key, this.props.itemType)}
-                    style= {{}}>
-                        <View
-                            style={{ flex:1, backgroundColor: 'red', justifyContent: 'center', marginTop: 5, marginBottom: 5}}>
-                            <Animated.Text
-                            style={{
-                                color: 'white',
-                                paddingHorizontal: 25,
-                                marginTop: 5,
-                                fontWeight: '600',
-                                transform: [{ scale }]
-                            }}>
-                            <Ionicons name={trashIconName} size={40} color='white' />
-                            </Animated.Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.props.deleteItem(myItem.key, 'toto')}>
-                        <View
-                            style={{ flex: 1, backgroundColor: 'orange', justifyContent: 'center', marginTop: 5, marginBottom: 5 }}>
-                            <Animated.Text
-                            style={{
-                                color: 'white',
-                                paddingHorizontal: 20,
-                                fontWeight: '600',
-                                transform: [{ scale }]
-                            }}>
-                            <Ionicons name='md-create' size={40} color='white' />
-                            </Animated.Text>
-                        </View>
-                    </TouchableOpacity>
-                </>
-            )
-        }
 
         return(
             <TouchableHighlight 
                 style={styles.main_container}
                 //onPress={() => displayDetailsForMyItem(myItem.key)}
-                >
-                <>
-
+            >
+                <View style={styles.main_container}>
                     <View style={styles.first_line}>
                         <View style={styles.left_part_container}>
                             <Image style={styles.date_bg} source={require('../assets/icons/list_bg.png')} />
@@ -112,7 +68,7 @@ class MyItem extends React.Component{
                         </View>
                         }
                     </View>
-                </>
+                </View>
             </TouchableHighlight>
         )
     }
@@ -122,8 +78,8 @@ const styles=StyleSheet.create({
     main_container: {
         height: 100,
         flex: 1,
-        marginTop: 5,
-        marginBottom: 5,
+        marginTop: 2,
+        marginBottom: 2,
         backgroundColor: '#465881'
     },
     top_left_elmnts: {

@@ -1,21 +1,19 @@
 // components/Money.js
 
 import React from 'react'
-import { StyleSheet, View, Image, Platform, FlatList, ActivityIndicator, Text } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { StyleSheet, View, Image, Platform, ActivityIndicator, Text, TouchableOpacity } from 'react-native'
 import MyItem from './MyItem'
 import { Ionicons } from '@expo/vector-icons'
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
+import { SwipeListView } from 'react-native-swipe-list-view'
 import SwipeValueBasedUi from '../functions/SwipeValueBasedUI'
 
 /*TODO:
-- permettre de parcourir la liste des prêts d'argent ou d'objet réalisés et de l'ordonner selon certains critères 
-- (par montant, date, type, ...)
 - PErmettre d'éditer un prêt
 */
 
-class LendList extends React.Component {
+export default class LendList extends React.Component {
 
     constructor(props) {
         super(props)
@@ -56,13 +54,12 @@ class LendList extends React.Component {
 
     _updateNavigationParams() {
         const navigation = this.props.navigation
-        const type = this.props.route.params?.type ?? 'defaultValue'
 
         let addIconName
         addIconName = ((Platform.OS == 'android') ? 'md-add' : 'ios-add')
 
 
-        if (Platform.OS === "ios" && type !== 'People'){
+        if (Platform.OS === "ios"){
             navigation.setOptions({
                         headerRight: () => <TouchableOpacity style={styles.add_touchable_headerrightbutton}
                                         onPress={() => this._addItem()}>
@@ -89,9 +86,7 @@ class LendList extends React.Component {
 
     //Android dedicated
     _displayFloatingActionButton() {
-        const type = this.props.route.params?.type ?? 'defaultValue'
-
-        if (Platform.OS === 'android' && type !== 'People'){
+        if (Platform.OS === 'android'){
             return(
             <TouchableOpacity style={styles.add_touchable_floatingactionbutton}
                 onPress={() => this._addItem()}>
@@ -118,6 +113,46 @@ class LendList extends React.Component {
         alert(type + ' deleted')
     }
 
+    _closeRow = (rowMap, rowKey) => {
+        if (rowMap[rowKey]) {
+            rowMap[rowKey]._closeRow();
+        }
+    }
+
+    _deleteRow = (rowMap, rowKey) => {
+        closeRow(rowMap, rowKey);
+        this._deleteItem()
+    }
+
+    _onRowDidOpen = rowKey => {
+        console.log('This row opened', rowKey);
+    }
+
+    _renderHiddenItem = (data, rowMap) => {
+        let ptfPrefix
+        (Platform.OS === 'android') ? ptfPrefix = 'md-' : ptfPrefix = 'ios-'
+
+        const editIconName = ptfPrefix + 'create'
+        const deleteIconName = ptfPrefix + 'trash'
+
+        return (
+            <View style={styles.rowBack}>
+                <Text style={styles.backTextWhite}>Left</Text>
+                <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                    onPress={() => this._closeRow(rowMap, data.item.index)} 
+                    >
+                    <Text style={styles.backTextWhite}>Close</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.backRightBtn, styles.backRightBtnRight]}
+                    onPress={() => this._deleteRow(rowMap, data.item.index)} 
+                    >
+                    <Ionicons name={deleteIconName} style={styles.icon} />
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     render(){
         const type = this.props.route.params?.type ?? 'defaultValue'
 
@@ -137,19 +172,22 @@ class LendList extends React.Component {
                         {(type === 'Money') ? this.state.total + ' €' : this.state.total}
                     </Text>
                 </View>
-                <FlatList
-                    style={styles.list}
-                    data={this.state.dataList}
-                    keyExtractor={(item) => item.key.toString()}
-                    renderItem={({item}) => <MyItem 
-                        myItem={item}
-                        itemType={type}
-                        displayDetailsForMyItem={this._displayDetailsForMyItem}
-                        deleteItem={this._deleteItem}/>}
-                    onEndReachedThreshold={0.5}
-                    onEndReached={() => {
-                    }}
-                />
+                <View style={styles.main_container}>
+                    <SwipeListView
+                        data={this.state.dataList}
+                        renderItem={({item}) => <MyItem 
+                            myItem={item}
+                            itemType={type}
+                            deleteItem={this._deleteItem}/>}
+                        renderHiddenItem={this._renderHiddenItem}
+                        leftOpenValue={75}
+                        rightOpenValue={-150}
+                        previewRowKey={'0'}
+                        previewOpenValue={-40}
+                        previewOpenDelay={3000}
+                        onRowDidOpen={this._onRowDidOpen}
+                    />
+                </View>
             </View>
         )
     }
@@ -159,6 +197,10 @@ const styles=StyleSheet.create({
     main_container: {
         flex: 1,
         backgroundColor: '#003F5C'
+    },
+    icon:{
+        fontSize: 35,
+        color: 'white'
     },
     title_container: {
         justifyContent: 'center',
@@ -194,8 +236,6 @@ const styles=StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    list: {
-    },
     activity: {
         position: 'absolute',
         left: 0,
@@ -205,7 +245,34 @@ const styles=StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#003F5C'
-      }
+    },
+    backTextWhite: {
+        color: '#FFF',
+    },
+    rowBack: {
+        alignItems: 'center',
+        backgroundColor: '#003F5C',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
+    backRightBtn: {
+        alignItems: 'center',
+        bottom: 0,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        width: 75,
+        marginTop: 2,
+        marginBottom: 2
+    },
+    backRightBtnLeft: {
+        backgroundColor: 'blue',
+        right: 75,
+    },
+    backRightBtnRight: {
+        backgroundColor: 'red',
+        right: 0,
+    },
 })
-
-export default LendList

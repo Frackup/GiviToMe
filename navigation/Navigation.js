@@ -13,6 +13,7 @@ import AddStuff from '../components/AddStuff'
 import Settings from '../components/Settings'
 import ItemDetails from '../components/ItemDetails'
 import Test from '../components/Test'
+import TypesList from '../components/TypesList'
 
 const Tab = createBottomTabNavigator()
 
@@ -67,6 +68,14 @@ function HomeStackScreen() {
             component={Settings} 
             options={({route, navigation}) => (
                 {headerTitle: 'Settings',
+                route: {route}, 
+                navigation: {navigation}}
+            )}
+            />
+            <HomeStack.Screen name="TypesList"
+            component={TypesList} 
+            options={({route, navigation}) => (
+                {headerTitle: 'Les types',
                 route: {route}, 
                 navigation: {navigation}}
             )}

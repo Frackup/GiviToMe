@@ -25,7 +25,6 @@ class Home extends React.Component {
     constructor(props) {
         super(props)
         this._goToSettings = this._goToSettings.bind(this)
-        //this.ref = firebase.firestore().collection('globalData')
 
         this.state = { 
             totalMoney: 0,

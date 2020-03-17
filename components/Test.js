@@ -1,22 +1,15 @@
 // components/Test.js
 
 import React from 'react'
-import { StyleSheet, View, Image, Platform, ActivityIndicator, Text } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { StyleSheet, View, Image, Platform, ActivityIndicator, Text, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
-import Moment from 'react-moment'
 import MyItem from './MyItem'
-import SwipeValueBasedUi from '../functions/SwipeValueBasedUI'
 
 import { SwipeListView } from 'react-native-swipe-list-view';
 
-/*TODO:
-- PErmettre d'éditer un prêt
-*/
-
-class Test extends React.Component {
+export default class Test extends React.Component {
 
     constructor(props) {
         super(props)
@@ -57,13 +50,12 @@ class Test extends React.Component {
 
     _updateNavigationParams() {
         const navigation = this.props.navigation
-        const type = 'Money'
 
         let addIconName
         addIconName = ((Platform.OS == 'android') ? 'md-add' : 'ios-add')
 
 
-        if (Platform.OS === "ios" && type !== 'People'){
+        if (Platform.OS === "ios"){
             navigation.setOptions({
                         headerRight: () => <TouchableOpacity style={styles.add_touchable_headerrightbutton}
                                         onPress={() => this._addItem()}>
@@ -90,9 +82,7 @@ class Test extends React.Component {
 
     //Android dedicated
     _displayFloatingActionButton() {
-        const type = 'Money'
-
-        if (Platform.OS === 'android' && type !== 'People'){
+        if (Platform.OS === 'android'){
             return(
             <TouchableOpacity style={styles.add_touchable_floatingactionbutton}
                 onPress={() => this._addItem()}>
@@ -135,19 +125,25 @@ class Test extends React.Component {
     }
 
     _renderHiddenItem = (data, rowMap) => {
+        let ptfPrefix
+        (Platform.OS === 'android') ? ptfPrefix = 'md-' : ptfPrefix = 'ios-'
+
+        const editIconName = ptfPrefix + 'create'
+        const deleteIconName = ptfPrefix + 'trash'
+
         return (
             <View style={styles.rowBack}>
-                <Text>Left</Text>
+                <Text style={styles.backTextWhite}>Left</Text>
                 <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                    //onPress={() => this._closeRow(rowMap, data.item.index)} 
+                    onPress={() => this._closeRow(rowMap, data.item.index)} 
                     >
                     <Text style={styles.backTextWhite}>Close</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.backRightBtn, styles.backRightBtnRight]}
-                    //onPress={() => this._deleteRow(rowMap, data.item.index)} 
+                    onPress={() => this._deleteRow(rowMap, data.item.index)} 
                     >
-                    <Text style={styles.backTextWhite}>Delete</Text>
+                    <Ionicons name={deleteIconName} style={styles.icon} />
                 </TouchableOpacity>
             </View>
         )
@@ -162,45 +158,45 @@ class Test extends React.Component {
                 <ActivityIndicator size="large" color="#FB5B5A"/>
               </View>
             )
-        } else {
-            return(
-                <View style={styles.main_container}>
-                    <View style={styles.title_container}>
-                        <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
-                        <Text style={styles.header_text}>
-                            {(type === 'Money') ? this.state.total + ' €' : this.state.total}
-                        </Text>
-                    </View>
-                    <View style={styles.main_container}>
-                        <SwipeListView
-                            data={this.state.dataList}
-                            renderItem={({item}) => <MyItem 
-                                myItem={item}
-                                itemType={type}
-                                displayDetailsForMyItem={this._displayDetailsForMyItem}
-                                deleteItem={this._deleteItem}/>}
-                            renderHiddenItem={this._renderHiddenItem}
-                            leftOpenValue={75}
-                            rightOpenValue={-150}
-                            previewRowKey={'0'}
-                            previewOpenValue={-40}
-                            previewOpenDelay={3000}
-                            onRowDidOpen={this._onRowDidOpen}
-                        />
-                    </View>
-                </View>
-            )
         }
+        
+        return(
+            <View style={styles.main_container}>
+                <View style={styles.title_container}>
+                    <Image source={require('../assets/icons/cadre.png')} style={styles.cadre} />
+                    <Text style={styles.header_text}>
+                        {(type === 'Money') ? this.state.total + ' €' : this.state.total}
+                    </Text>
+                </View>
+                <View style={styles.main_container}>
+                    <SwipeListView
+                        data={this.state.dataList}
+                        renderItem={({item}) => <MyItem 
+                            myItem={item}
+                            itemType={type}
+                            deleteItem={this._deleteItem}/>}
+                        renderHiddenItem={this._renderHiddenItem}
+                        leftOpenValue={75}
+                        rightOpenValue={-150}
+                        previewRowKey={'0'}
+                        previewOpenValue={-40}
+                        previewOpenDelay={3000}
+                        onRowDidOpen={this._onRowDidOpen}
+                    />
+                </View>
+            </View>
+        )
     }
 }
 
 const styles=StyleSheet.create({
-    toto: {
-        color: 'white'
-    },
     main_container: {
         flex: 1,
         backgroundColor: '#003F5C'
+    },
+    icon:{
+        fontSize: 35,
+        color: 'white'
     },
     title_container: {
         justifyContent: 'center',
@@ -246,24 +242,12 @@ const styles=StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#003F5C'
     },
-    container: {
-        backgroundColor: 'white',
-        flex: 1,
-    },
     backTextWhite: {
         color: '#FFF',
     },
-    rowFront: {
-        alignItems: 'center',
-        backgroundColor: '#CCC',
-        borderBottomColor: 'black',
-        borderBottomWidth: 1,
-        justifyContent: 'center',
-        height: 50,
-    },
     rowBack: {
         alignItems: 'center',
-        backgroundColor: '#DDD',
+        backgroundColor: '#003F5C',
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -276,6 +260,8 @@ const styles=StyleSheet.create({
         position: 'absolute',
         top: 0,
         width: 75,
+        marginTop: 2,
+        marginBottom: 2
     },
     backRightBtnLeft: {
         backgroundColor: 'blue',
@@ -285,10 +271,4 @@ const styles=StyleSheet.create({
         backgroundColor: 'red',
         right: 0,
     },
-    trash: {
-        height: 25,
-        width: 25,
-    },
 })
-
-export default Test
