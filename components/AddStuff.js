@@ -37,7 +37,7 @@ class AddStuff extends React.Component {
 
         const saveIconName = "ic_save.png"
 
-        if (Platform.OS === "ios" && type !== 'People'){
+        if (Platform.OS === "ios"){
             navigation.setOptions({
                         headerRight: () => <TouchableOpacity style={styles.save_touchable_headerrightbutton}
                                         onPress={() => this._saveData()}>
@@ -49,7 +49,7 @@ class AddStuff extends React.Component {
 
     _populateTypes() {
         let myTypes = new TypeData();
-        myTypes.getTypeData().then(val => { this.setState({
+        myTypes.getData().then(val => { this.setState({
             typeList: val
         })
         })

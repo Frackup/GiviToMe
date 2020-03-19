@@ -4,23 +4,28 @@
 Cette page affiche le récapitulatif des assets prêtés et du nombre de personnes impliquées
 Une première récupération des informations de base de données se fera à ce niveau pour permettre de calculer les
 informations à afficher.
-
-Important d'utiliser ensuite redux pour permettre de conserver et transférer les informations sans effectuer à nouveau
-un appel à la DB.
 *************/
 
 import React from 'react'
 import { StyleSheet, Text, Image, View, TouchableOpacity, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
-//import firebase from '../config/Firebase'
 
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
+import { CommonActions } from '@react-navigation/native';
+import ResetNavigation from '../functions/ResetNavigation'
 
 /* TODO:
  */
 
-class Home extends React.Component {
+const resetAction = CommonActions.reset({
+      index: 0,
+      routes: [
+        { name: 'Home' },
+      ],
+    })
+
+export default class Home extends React.Component {
 
     constructor(props) {
         super(props)
@@ -72,8 +77,9 @@ class Home extends React.Component {
 
         this.focusListener = navigation.addListener('focus', () => {
             this._getData()
+            console.log('coucou')
+            //navigation.dispatch(resetAction)
         });
-        
         this._updateNavigationParams()
     }
 
@@ -216,5 +222,3 @@ const styles = StyleSheet.create({
         color: 'white'
     }
 })
-
-export default Home

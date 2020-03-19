@@ -25,7 +25,8 @@ const TestStack = createStackNavigator()
 
 function HomeStackScreen() {
     return (
-        <HomeStack.Navigator 
+        <HomeStack.Navigator
+            initialRouteName='Home'
             screenOptions={{
             headerStyle: {
                 backgroundColor: '#003F5C',
@@ -36,14 +37,6 @@ function HomeStackScreen() {
             component={Home} 
             options={({route, navigation}) => (
                 {headerTitle: 'Home Page',
-                route: {route}, 
-                navigation: {navigation}}
-            )}
-            />
-            <HomeStack.Screen name="LendList" 
-            component={LendList}
-            options={({route, navigation}) => (
-                {headerTitle: 'Mes prêts',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -223,7 +216,7 @@ function App() {
                     inactiveBackgroundColor: '#003F5C'
                 }}
             >
-                <Tab.Screen name='Home' component={HomeStackScreen} />
+                <Tab.Screen name='Home' component={HomeStackScreen} initialRouteName='Home' />
                 <Tab.Screen name='Money' component={MoneyStackScreen} />
                 <Tab.Screen name='Stuff' component={StuffStackScreen} />
                 <Tab.Screen name='Test' component={TestStackScreen} />
