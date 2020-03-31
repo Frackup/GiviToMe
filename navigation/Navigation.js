@@ -213,10 +213,14 @@ function App() {
                     activeTintColor: '#FB5B5A',
                     activeBackgroundColor: 'white',
                     inactiveTintColor: '#FB5B5A',
-                    inactiveBackgroundColor: '#003F5C'
+                    inactiveBackgroundColor: '#003F5C',
                 }}
             >
-                <Tab.Screen name='Home' component={HomeStackScreen} initialRouteName='Home' />
+                <Tab.Screen 
+                name='Home' 
+                component={HomeStackScreen} 
+                initialRouteName='Home' 
+                />
                 <Tab.Screen name='Money' component={MoneyStackScreen} />
                 <Tab.Screen name='Stuff' component={StuffStackScreen} />
                 <Tab.Screen name='Test' component={TestStackScreen} />

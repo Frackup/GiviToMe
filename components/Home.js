@@ -12,7 +12,7 @@ import { Ionicons } from '@expo/vector-icons'
 
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import ResetNavigation from '../functions/ResetNavigation'
 
 /* TODO:
@@ -39,7 +39,7 @@ export default class Home extends React.Component {
     }
 
     _updateNavigationParams() {
-        const navigation = this.props.navigation
+        const navigation = useNavigation()//this.props.navigation
 
         let settingsIconName
         (Platform.OS === 'android') ? settingsIconName = 'md-settings' : settingsIconName = 'ios-settings'
@@ -85,7 +85,7 @@ export default class Home extends React.Component {
 
     componentWillUnmount() {
         // Remove the event listener before removing the screen from the stack
-        this.focusListener.remove();
+        this.focusListener();
     }
 
     _addMoney(){
