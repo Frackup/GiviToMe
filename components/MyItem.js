@@ -76,7 +76,7 @@ class MyItem extends React.Component{
 
 const styles=StyleSheet.create({
     main_container: {
-        height: 100,
+        height: 80,
         flex: 1,
         marginTop: 2,
         marginBottom: 2,
@@ -105,8 +105,8 @@ const styles=StyleSheet.create({
     first_line: {
         flexDirection: 'row',
         width: '100%',
-        flex: 2,
-        marginTop: 4
+        flex: 5,
+        marginTop: 2
     },
     date_bg: {
         position: 'absolute'
@@ -131,18 +131,18 @@ const styles=StyleSheet.create({
     main_data: {
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 6
+        flex: 10
     },
     main_text: {
         fontSize: 25,
-        margin: 10,
+        //margin: 10,
         color: '#FB5B5A'
     },
     last_row: {
         flexDirection: 'row',
-        flex: 2,
+        flex: 5,
         width: '100%',
-        marginBottom: 4
+        marginBottom: 2
     }
 })
 

@@ -8,7 +8,7 @@ import Moment from 'react-moment'
 import StuffData from '../dbaccess/StuffData'
 import TypeData from '../dbaccess/TypeData'
 
-class AddStuff extends React.Component {
+export default class AddStuff extends React.Component {
 
     constructor() {
         super();
@@ -84,8 +84,9 @@ class AddStuff extends React.Component {
     _hideDP = () => {
         if (this.state.showdp) {
             this.setState({
-                show: false,
+                showdp: false,
             })
+            this._hidePicker()
         }
     }
 
@@ -93,6 +94,7 @@ class AddStuff extends React.Component {
         this.setState({
             showpicker: true
         });
+        this._hideDP()
         Keyboard.dismiss()
     }
 
@@ -219,7 +221,7 @@ class AddStuff extends React.Component {
         const { showdp, showpicker, date } = this.state
 
         let typeItems = this.state.typeList.map( ( val ) => {
-            return <Picker.Item key={val.key} value={val.label} label={val.label} />
+            return <Picker.Item key={val.key} value={val.label} label={val.label} color='white' />
         })
 
         return(
@@ -271,6 +273,9 @@ class AddStuff extends React.Component {
                 <View style={styles.dp_view}>
                     { showdp && <DateTimePicker value={date}
                         mode="date"
+                        style={{
+                            backgroundColor: 'white'
+                        }}
                         is24Hour={true}
                         display="default"
                         onChange={this._setDate} />
@@ -281,7 +286,7 @@ class AddStuff extends React.Component {
                         </View>
                 */}
                     { showpicker && 
-                    <Picker selectedValue = {this.state.type} 
+                    <Picker selectedValue = {this.state.type}
                     onValueChange = {(text) => this.setState({type: text})}>
                         { typeItems }
                         </Picker>
@@ -356,5 +361,3 @@ const styles=StyleSheet.create({
         marginLeft: 10,
     },
 })
-
-export default AddStuff

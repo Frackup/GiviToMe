@@ -14,6 +14,7 @@ import Settings from '../components/Settings'
 import ItemDetails from '../components/ItemDetails'
 import Test from '../components/Test'
 import TypesList from '../components/TypesList'
+import AddType from '../components/AddType'
 
 const Tab = createBottomTabNavigator()
 
@@ -69,6 +70,14 @@ function HomeStackScreen() {
             component={TypesList} 
             options={({route, navigation}) => (
                 {headerTitle: 'Les types',
+                route: {route}, 
+                navigation: {navigation}}
+            )}
+            />
+            <HomeStack.Screen name="AddType"
+            component={AddType} 
+            options={({route, navigation}) => (
+                {headerTitle: 'Nouveau Type',
                 route: {route}, 
                 navigation: {navigation}}
             )}
@@ -182,7 +191,7 @@ function TestStackScreen() {
     )
 }
 
-function App() {
+export default function App() {
     return(
         <NavigationContainer>
             <Tab.Navigator
@@ -221,12 +230,10 @@ function App() {
                 component={HomeStackScreen} 
                 initialRouteName='Home' 
                 />
-                <Tab.Screen name='Money' component={MoneyStackScreen} />
+                <Tab.Screen name='Money' component={MoneyStackScreen} initialRouteName />
                 <Tab.Screen name='Stuff' component={StuffStackScreen} />
                 <Tab.Screen name='Test' component={TestStackScreen} />
             </Tab.Navigator>
         </NavigationContainer>
     )
 }
-
-export default App

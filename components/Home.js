@@ -13,13 +13,12 @@ import { Ionicons } from '@expo/vector-icons'
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import ResetNavigation from '../functions/ResetNavigation'
 
 /* TODO:
  */
 
-const resetAction = CommonActions.reset({
-      index: 0,
+const resetAction = () => CommonActions.reset({
+      index: 1,
       routes: [
         { name: 'Home' },
       ],
@@ -39,7 +38,7 @@ export default class Home extends React.Component {
     }
 
     _updateNavigationParams() {
-        const navigation = useNavigation()//this.props.navigation
+        const navigation = this.props.navigation
 
         let settingsIconName
         (Platform.OS === 'android') ? settingsIconName = 'md-settings' : settingsIconName = 'ios-settings'
@@ -77,7 +76,6 @@ export default class Home extends React.Component {
 
         this.focusListener = navigation.addListener('focus', () => {
             this._getData()
-            console.log('coucou')
             //navigation.dispatch(resetAction)
         });
         this._updateNavigationParams()
@@ -107,7 +105,7 @@ export default class Home extends React.Component {
         return(
             <View style={styles.main_container}>
                 <View style={styles.header_view}>
-                    <Image source={require('../assets/icons/cadre_full.png')} style={styles.cadre} />
+                    <Image source={require('../assets/icons/title_bckgrnd.png')} style={styles.cadre_header} />
                     <Text style={styles.header_text}>GiViToMe</Text>
                 </View>
 
@@ -157,7 +155,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 30,
+        marginTop: -30,
         marginBottom: 20
     },
     header_text: {
@@ -200,7 +198,11 @@ const styles = StyleSheet.create({
     },
     cadre: {
         position: 'absolute',
-        marginRight: 10,
+        marginRight: 0,
+    },
+    cadre_header: {
+        position: 'absolute',
+        width: '100%'
     },
     icon_style: {
         fontSize: 60,

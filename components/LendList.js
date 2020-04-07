@@ -7,7 +7,6 @@ import { Ionicons } from '@expo/vector-icons'
 import StuffData from '../dbaccess/StuffData'
 import MoneyData from '../dbaccess/MoneyData'
 import { SwipeListView } from 'react-native-swipe-list-view'
-import SwipeValueBasedUi from '../functions/SwipeValueBasedUI'
 
 /*TODO:
 - PErmettre d'éditer un prêt
@@ -104,28 +103,32 @@ export default class LendList extends React.Component {
         this.props.navigation.navigate('ItemDetails', { idMyItem: idItem, type: type })
     }
 
-    _deleteItem = (idItem, type) => {
-        this.state.mydataObject.delete(idItem)
+    _deleteItem = (itemKey) => {
+        const type = this.props.route.params?.type ?? 'defaultValue'
+        const typeSup = (type === 'Money') ? "d'argent" : "d'objet"
+
+        console.log('toto :',itemKey)
+        this.state.mydataObject.delete(itemKey)
         this.setState({
-            dataList: this.state.moneyList.filter(item => item.key != idItem)
+            dataList: this.state.dataList.filter(item => item.key != itemKey)
         })
 
-        alert(type + ' deleted')
+        alert('Prêt ' + typeSup + ' supprimé')
     }
 
     _closeRow = (rowMap, rowKey) => {
         if (rowMap[rowKey]) {
-            rowMap[rowKey]._closeRow();
+            rowMap[rowKey].closeRow();
         }
     }
 
-    _deleteRow = (rowMap, rowKey) => {
-        closeRow(rowMap, rowKey);
-        this._deleteItem()
+    _deleteRow = (rowMap, data) => {
+        this._closeRow(rowMap, data.item.key);
+        this._deleteItem(data.item.key)
     }
 
     _onRowDidOpen = rowKey => {
-        console.log('This row opened', rowKey);
+        //console.log('This row opened', rowKey);
     }
 
     _renderHiddenItem = (data, rowMap) => {
@@ -139,13 +142,13 @@ export default class LendList extends React.Component {
             <View style={styles.rowBack}>
                 <Text style={styles.backTextWhite}>Left</Text>
                 <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                    onPress={() => this._closeRow(rowMap, data.item.index)} 
+                    onPress={() => this._closeRow(rowMap, data.item.key)} 
                     >
                     <Text style={styles.backTextWhite}>Close</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.backRightBtn, styles.backRightBtnRight]}
-                    onPress={() => this._deleteRow(rowMap, data.item.index)} 
+                    onPress={() => this._deleteRow(rowMap, data)} 
                     >
                     <Ionicons name={deleteIconName} style={styles.icon} />
                 </TouchableOpacity>
@@ -268,7 +271,7 @@ const styles=StyleSheet.create({
         marginBottom: 2
     },
     backRightBtnLeft: {
-        backgroundColor: 'blue',
+        backgroundColor: 'grey',
         right: 75,
     },
     backRightBtnRight: {

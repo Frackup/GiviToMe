@@ -26,6 +26,7 @@ export default class TypesList extends React.Component {
             this.setState({
                 dataList: val,
                 isLoading: false,
+                myTypes: myTypes
             })
         })
 
@@ -38,7 +39,6 @@ export default class TypesList extends React.Component {
 
     _updateNavigationParams() {
         const navigation = this.props.navigation
-        const type = this.props.route.params?.type ?? 'defaultValue'
 
         const addIconName = ((Platform.OS == 'android') ? 'md-add' : 'ios-add')
 
@@ -54,18 +54,32 @@ export default class TypesList extends React.Component {
     }
 
     componentDidMount(){
+        const { navigation } = this.props
+
         this._initData()
         this._updateNavigationParams()
+
+        this.focusListener = navigation.addListener('focus', () => {
+            this._initData()
+            //navigation.dispatch(resetAction)
+        });
+    }
+
+    componentWillUnmount() {
+        // Remove the event listener before removing the screen from the stack
+        this.focusListener();
     }
 
     _addType = () => {
+        const navigation = this.props.navigation
         // pop up pour ajouter un type
-        alert('Adding type')
+        //alert('Adding type')
+        navigation.navigate('AddType')
     }
 
     //Android dedicated
     _displayFloatingActionButton() {
-        const type = this.props.route.params?.type ?? 'defaultValue'
+        //const type = this.props.route.params?.type ?? 'defaultValue'
 
         if (Platform.OS === 'android'){
             return(
@@ -77,8 +91,13 @@ export default class TypesList extends React.Component {
         }
     }
 
-    _deleteItem() {
-        alert('Deleted')
+    _deleteItem = (data) => {
+        this.state.myTypes.delete(data.item.key)
+        this.setState({
+            dataList: this.state.dataList.filter(item => item.key != data.item.key)
+        })
+
+        alert('Type ' + data.item.label + ' supprimé.')
     }
 
     _renderItem = data => {
@@ -90,18 +109,19 @@ export default class TypesList extends React.Component {
     }
 
     _closeRow = (rowMap, rowKey) => {
+        console.log('My rowMap : ', rowMap)
         if (rowMap[rowKey]) {
-            rowMap[rowKey]._closeRow();
+            rowMap[rowKey].closeRow();
         }
     }
 
-    _deleteRow = (rowMap, rowKey) => {
-        this._closeRow(rowMap, rowKey);
-        this._deleteItem()
+    _deleteRow = (rowMap, data) => {
+        this._closeRow(rowMap, data.index);
+        this._deleteItem(data)
     }
 
     _onRowDidOpen = rowKey => {
-        console.log('This row opened', rowKey);
+        //console.log('This row opened', rowKey);
     }
 
     _renderHiddenItem = (data, rowMap) => {
@@ -109,13 +129,13 @@ export default class TypesList extends React.Component {
             <View style={styles.rowBack}>
                 <Text>Left</Text>
                 <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                    onPress={() => this._closeRow(rowMap, data.item.index)} 
+                    onPress={() => this._closeRow(rowMap, data.item.key)} 
                     >
                     <Text style={styles.backTextWhite}>Close</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.backRightBtn, styles.backRightBtnRight]}
-                    onPress={() => this._deleteRow(rowMap, data.item.index)} 
+                    onPress={() => this._deleteRow(rowMap, data)} 
                     >
                     <Text style={styles.backTextWhite}>Delete</Text>
                 </TouchableOpacity>
@@ -164,13 +184,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#003F5C'
     },
     cell_container: {
-        height: 100,
+        height: 65,
         flex: 1,
         marginTop: 2,
         marginBottom: 2,
         backgroundColor: '#465881',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderBottomLeftRadius: 10,
+        borderTopRightRadius: 10,
     },
     title_container: {
         justifyContent: 'center',
@@ -222,7 +244,7 @@ const styles = StyleSheet.create({
         flex: 6
     },
     main_text: {
-        fontSize: 25,
+        fontSize: 20,
         margin: 10,
         color: '#FB5B5A'
     },
@@ -248,7 +270,7 @@ const styles = StyleSheet.create({
         width: 75,
     },
     backRightBtnLeft: {
-        backgroundColor: 'blue',
+        backgroundColor: 'grey',
         right: 75,
     },
     backRightBtnRight: {

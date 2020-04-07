@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import TypeData from '../dbaccess/TypeData'
 
-class Settings extends React.Component {
+export default class Settings extends React.Component {
     
     constructor(props){
         super(props)
@@ -113,5 +113,3 @@ const styles = StyleSheet.create({
         color: 'white'
     },
 })
-
-export default Settings
