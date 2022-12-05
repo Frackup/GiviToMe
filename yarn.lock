@@ -1426,6 +1426,11 @@
     color "^3.1.2"
     react-native-iphone-x-helper "^1.2.1"
 
+"@sandstreamdev/react-swipeable-list@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@sandstreamdev/react-swipeable-list/-/react-swipeable-list-0.4.1.tgz#72aadc976af829d1eaebd4554117354b909819db"
+  integrity sha512-vURGNRnlewNqVLnUXu0tB8T2ctfImV0IB47AdfKQYGa8sY8zNdXUQDliVwA1B+ho/8nF6ivEstZUVBHK/F9r+A==
+
 "@types/bytebuffer@^5.0.40":
   version "5.0.40"
   resolved "https://registry.yarnpkg.com/@types/bytebuffer/-/bytebuffer-5.0.40.tgz#d6faac40dcfb09cd856cdc4c01d3690ba536d3ee"
@@ -2492,9 +2497,9 @@ decamelize@^1.1.1, decamelize@^1.2.0:
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 deep-assign@^3.0.0:
   version "3.0.0"
@@ -5287,6 +5292,11 @@ react-native-gesture-handler@~1.5.0:
     invariant "^2.2.4"
     prop-types "^15.7.2"
 
+react-native-ionicons@^5.0.0-beta:
+  version "5.0.0-rc"
+  resolved "https://registry.yarnpkg.com/react-native-ionicons/-/react-native-ionicons-5.0.0-rc.tgz#07e96279ddaa789c15a14564c091937cb33eba91"
+  integrity sha512-sxGRilnejot/n1GFwUrAzOgZeF9sHJzpV6AcwQKR8q5U9k+ZCgDHq5ajrSn82A4b5TDv6F0aPJTDB2/9/EuVcw==
+
 react-native-iphone-x-helper@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
@@ -5322,6 +5332,11 @@ react-native-screens@2.0.0-alpha.12:
   integrity sha512-tOxHGQUN83MTmQB4ghoQkibqOdGiX4JQEmeyEv96MKWO/x8T2PJv84ECUos9hD3blPRQwVwSpAid1PPPhrVEaw==
   dependencies:
     debounce "^1.2.0"
+
+react-native-swipe-list-view@^2.3.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-swipe-list-view/-/react-native-swipe-list-view-2.5.0.tgz#4740f595aa3253ccd2c8e44131f83bc957f57ddb"
+  integrity sha512-HTsVaxA3an6myShlLroTyDZo/AOrZ6HJr+EwCaGRE2YuGdM/cFHoYfsuslOEEig5GenTw8DILUB8kqYWQ5lJtA==
 
 react-native-tab-view@^2.11.0:
   version "2.11.0"
